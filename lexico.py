@@ -1,13 +1,17 @@
 import ply.lex as lex
 
-
 states = (
-    ('intag', 'exclusive'),
+    ('tag', 'exclusive'),
+    ('class', 'exclusive'),
+    ('attribute', 'exclusive'),
+    ('interpolation', 'exclusive'),
+    ('comment', 'exclusive'),
+    ('icomment', 'exclusive')
 )
 
 reserved = {
     # Reserved words for tags
-    'doctype': 'DOCTYPE',
+    #'doctype': 'DOCTYPE', # maybe remove because the doctype analysed in Pug is a Pug TAG and not the doctype HTML tag
     'html': 'HTML',
     'head': 'HEAD',
     'title': 'TITLE',
@@ -95,39 +99,106 @@ reserved = {
 
 # List of token names
 tokens = [
-    'INDENT', 
-    'TAG',   
+    'DOCTYPE', 
+    'INDENT',
+    'TAG', 
+    'CLASS', 
+    'ATTRIBUTE',
     'PLAIN_TEXT',
-    'ATTRIBUTE'
+    'DOT',
+    'LPAREN',
+    'RPAREN',
+    'LBRACE',
+    'RBRACE',
+    'HASHTAG',
+    'INTERPOLATED_CODE',
+    'DOUBLE_SLASH_DASH',
+    'DOUBLE_SLASH',
+    'UNBUFFERED_COMMENT',
+    'BUFFERED_COMMENT'
+    
 ] + list(reserved.values())
 
-
-indent_value = 0
+def t_DOCTYPE(t):
+    r'doctype '
+    t.lexer.push_state('tag')
+    return t
 
 def t_ANY_INDENT(t):
     r'(\ {2})+'
-    indent_value_aux = len(t.value)
-    if(indent_value_aux == indent_value + 2):
-        return t
-
-def t_ANY_TAG(t):
-   r'[a-z0-9]+'
-   t.type = reserved.get(t.value, 'TAG')
-   t.lexer.push_state('intag')
-   return t
-
-
-# TENHO DE VER O Q TA MAL AQUI
-def t_intag_ATTRIBUTE(t):
-    r'\((.*?)\)'
     return t
 
+def t_tag_class_LPAREN(t):
+    r'\('
+    t.lexer.begin('attribute')
+    return t
 
-def t_intag_PLAIN_TEXT(t):
+def t_attribute_RPAREN(t): 
+    r'\)'
+    t.lexer.begin('tag')
+    return t
+
+def t_tag_TAG(t):
+   r'[a-z0-9]+'
+   t.type = reserved.get(t.value, 'TAG')
+   t.lexer.push_state('tag')
+   return t
+
+def t_tag_DOT(t):
+    r'\.'
+    t.lexer.begin('class')
+    return t
+
+def t_ANY_DOUBLE_SLASH_DASH(t):
+    r'\/\/\-'
+    t.lexer.begin('icomment')
+    return t
+
+def t_ANY_DOUBLE_SLASH(t):
+    r'\/\/'
+    t.lexer.begin('comment')
+    return t
+
+def t_tag_PLAIN_TEXT(t):
    r'[^#\.\n]+'
    return t
 
+def t_class_CLASS(t):
+    r'[a-z0-9\-]+'
+    t.lexer.begin('tag')
+    return t
 
+def t_attribute_ATTRIBUTE(t):
+    r'[^\(\)]+'
+    return t
+
+def t_tag_HASHTAG(t):
+    r'\#'
+    t.lexer.begin('interpolation')
+    return t
+
+def t_interpolation_LBRACE(t):
+    r'\{'
+    return t
+
+def t_interpolation_INTERPOLATED_CODE(t):
+    r'[^\{\}]+'
+    return t
+
+def t_interpolation_RBRACE(t):
+    r'\}'
+    t.lexer.begin('tag')
+    return t
+
+def t_icomment_UNBUFFERED_COMMENT(t):
+    r'.+'
+    t.lexer.begin('tag')
+    return t
+
+def t_comment_BUFFERED_COMMENT(t):
+    r'.+'
+    t.lexer.begin('tag')
+    return t
 
 
 
