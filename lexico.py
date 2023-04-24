@@ -1,17 +1,19 @@
 import ply.lex as lex
 
 states = (
+    ('doctype', 'exclusive'),
+    ('code', 'exclusive'),
     ('tag', 'exclusive'),
     ('class', 'exclusive'),
     ('attribute', 'exclusive'),
+    ('id', 'exclusive'),
     ('interpolation', 'exclusive'),
     ('comment', 'exclusive'),
-    ('icomment', 'exclusive')
+    ('icomment', 'exclusive'),
 )
 
 reserved = {
     # Reserved words for tags
-    #'doctype': 'DOCTYPE', # maybe remove because the doctype analysed in Pug is a Pug TAG and not the doctype HTML tag
     'html': 'HTML',
     'head': 'HEAD',
     'title': 'TITLE',
@@ -108,45 +110,33 @@ tokens = [
     'DOT',
     'LPAREN',
     'RPAREN',
-    'LBRACE',
-    'RBRACE',
-    'HASHTAG',
-    'INTERPOLATED_CODE',
+    'HASHTAG', # #
+    'ID_LITERAL', # 
+    'BEGIN_INTERPOLATION', # #{
+    'INTERPOLATED_CODE', #
+    'END_INTERPOLATION', # }
+    'DASH',
+    'CODE',
     'DOUBLE_SLASH_DASH',
     'DOUBLE_SLASH',
     'UNBUFFERED_COMMENT',
     'BUFFERED_COMMENT'
-    
 ] + list(reserved.values())
 
+
 def t_DOCTYPE(t):
-    r'doctype '
-    t.lexer.push_state('tag')
+    r'doctype\ html'
+    t.lexer.begin('doctype')
     return t
 
-def t_ANY_INDENT(t):
-    r'(\ {2})+'
-    return t
-
-def t_tag_class_LPAREN(t):
-    r'\('
-    t.lexer.begin('attribute')
-    return t
-
-def t_attribute_RPAREN(t): 
-    r'\)'
+def t_doctype_tag_TAG(t):
+    r'[a-z0-9]+'
+    t.type = reserved.get(t.value, 'TAG')
     t.lexer.begin('tag')
     return t
 
-def t_tag_TAG(t):
-   r'[a-z0-9]+'
-   t.type = reserved.get(t.value, 'TAG')
-   t.lexer.push_state('tag')
-   return t
-
-def t_tag_DOT(t):
-    r'\.'
-    t.lexer.begin('class')
+def t_tag_INDENT(t):
+    r'(\ {2})+'
     return t
 
 def t_ANY_DOUBLE_SLASH_DASH(t):
@@ -159,9 +149,35 @@ def t_ANY_DOUBLE_SLASH(t):
     t.lexer.begin('comment')
     return t
 
+def t_doctype_tag_DASH(t):
+    r'\-'
+    t.lexer.begin('code')
+    return t
+
+def t_tag_class_LPAREN(t):
+    r'\('
+    t.lexer.begin('attribute')
+    return t
+
 def t_tag_PLAIN_TEXT(t):
    r'[^#\.\n]+'
+   t.value = t.value[1:]
    return t
+
+def t_code_CODE(t):
+    r'.+'
+    t.lexer.begin('tag')
+    return t
+
+def t_attribute_RPAREN(t): 
+    r'\)'
+    t.lexer.begin('tag')
+    return t
+
+def t_tag_DOT(t):
+    r'\.'
+    t.lexer.begin('class')
+    return t
 
 def t_class_CLASS(t):
     r'[a-z0-9\-]+'
@@ -172,20 +188,26 @@ def t_attribute_ATTRIBUTE(t):
     r'[^\(\)]+'
     return t
 
-def t_tag_HASHTAG(t):
-    r'\#'
+def t_tag_BEGIN_INTERPOLATION(t):
+    r'\#\{'
     t.lexer.begin('interpolation')
     return t
 
-def t_interpolation_LBRACE(t):
-    r'\{'
+def t_tag_HASHTAG(t):
+    r'\#'
+    t.lexer.begin('id')
+    return t
+
+def t_id_ID_LITERAL(t):
+    r'[^#\.\n]+'
+    t.lexer.begin('tag')
     return t
 
 def t_interpolation_INTERPOLATED_CODE(t):
     r'[^\{\}]+'
     return t
 
-def t_interpolation_RBRACE(t):
+def t_interpolation_END_INTERPOLATION(t):
     r'\}'
     t.lexer.begin('tag')
     return t
@@ -200,29 +222,13 @@ def t_comment_BUFFERED_COMMENT(t):
     t.lexer.begin('tag')
     return t
 
-
-
-#t_INDENT = r''
-#t_OUTDENT = r''
-#t_NEWLINE = r'\n'
-#t_DOCTYPE = r''
-#t_ID = r''
-#t_CLASS = r''
-#t_ATTRIBUTE = r'\(([\w-]+)(?:=(["'])(.*?)\2)?\)'
-#t_INTERPOLATED_CODE = r'#\{.*\}' # e.g. msg="not my inside voice" in: p This is #{msg.toUpperCase()} ; out: <p>This is NOT MY INSIDE VOICE</p>
-#t_BUFFERED_COMMENT = r'\/\/.*' # single line buffered comment e.g. in: // this is a comment that will show for HTML readers ;  out: <!-- this is a comment that will show for HTML readers -->
-#t_UNBUFFERED_COMMENT = r'\/\/\-.*' # single line unbuffered comment e.g. in: //- this is a comment that will not show for HTML readers ; out: 
-
 # Ignored characters (whitespace)
-t_ANY_ignore = '\t'
-
+t_attribute_code_ignore = ' '
 
 # Handle newlines
 def t_ANY_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
-
-
 
 # Error handling
 def t_ANY_error(t):
