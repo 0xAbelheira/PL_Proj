@@ -1,16 +1,15 @@
 import ply.lex as lex
-
 states = (
     ('doctype', 'exclusive'),
-    ('code', 'exclusive'),
+    #('code', 'exclusive'),
     ('tag', 'exclusive'),
-    ('class', 'exclusive'),
-    ('attribute', 'exclusive'),
-    ('id', 'exclusive'),
-    ('interpolation', 'exclusive'),
-    ('comment', 'exclusive'),
-    ('icomment', 'exclusive'),
-)
+    #('class', 'exclusive'),
+    #('attribute', 'exclusive'),
+    #('id', 'exclusive'),
+    #('interpolation', 'exclusive'),
+    #('comment', 'exclusive'),
+    #('icomment', 'exclusive'),
+)    
 
 reserved = {
     # Reserved words for tags
@@ -71,7 +70,6 @@ reserved = {
     'small': 'SMALL',
     'strong': 'STRONG', 
     'em': 'EM',
-    'code': 'CODE',
     'pre': 'PRE',
     'blockquote': 'BLOCKQUOTE',
     'q': 'Q',
@@ -98,46 +96,44 @@ reserved = {
     'meter': 'METER',
     'b': 'B'
 }
-
 # List of token names
 tokens = [
-    'DOCTYPE', 
+    'DOCTYPE',
     'INDENT',
+    'OUTDENT',
     'TAG', 
-    'CLASS', 
-    'ATTRIBUTE',
-    'PLAIN_TEXT',
-    'DOT',
-    'LPAREN',
-    'RPAREN',
-    'HASHTAG', # #
-    'ID_LITERAL', # 
-    'BEGIN_INTERPOLATION', # #{
-    'INTERPOLATED_CODE', #
-    'END_INTERPOLATION', # }
-    'DASH',
-    'CODE',
-    'DOUBLE_SLASH_DASH',
-    'DOUBLE_SLASH',
-    'UNBUFFERED_COMMENT',
-    'BUFFERED_COMMENT'
+    #'CLASS', 
+    #'ATTRIBUTE',
+    #'PLAIN_TEXT',
+    #'DOT',
+    #'LPAREN',
+    #'RPAREN',
+    #'HASHTAG', # 
+    #'ID_LITERAL', # 
+    #'BEGIN_INTERPOLATION', # #{
+    #'INTERPOLATED_CODE', #
+    #'END_INTERPOLATION', # }
+    #'DASH',
+    #'CODE',
+    #'DOUBLE_SLASH_DASH',
+    #'DOUBLE_SLASH',
+    #'UNBUFFERED_COMMENT',
+    #'BUFFERED_COMMENT'
 ] + list(reserved.values())
 
 
 def t_DOCTYPE(t):
-    r'doctype\ html'
+    r'doctype\s+html'
     t.lexer.begin('doctype')
     return t
+
 
 def t_doctype_tag_TAG(t):
     r'[a-z0-9]+'
     t.type = reserved.get(t.value, 'TAG')
     t.lexer.begin('tag')
     return t
-
-def t_tag_INDENT(t):
-    r'(\ {2})+'
-    return t
+"""
 
 def t_ANY_DOUBLE_SLASH_DASH(t):
     r'\/\/\-'
@@ -224,11 +220,26 @@ def t_comment_BUFFERED_COMMENT(t):
 
 # Ignored characters (whitespace)
 t_attribute_code_ignore = ' '
-
+"""
+indent_level = 0
 # Handle newlines
 def t_ANY_newline(t):
-    r'\n+'
-    t.lexer.lineno += len(t.value)
+    r'\n[ \t]*'
+    global indent_level
+    t.lexer.lineno += 1
+    i = len(t.value) - 1
+    if (t.value[-1] != '\n') and (i != indent_level):
+        if i > indent_level:
+            t.type = 'INDENT'
+            t.value = i
+            indent_level = i
+        elif i < indent_level:
+            t.type = 'OUTDENT'
+            t.value = i
+            indent_level = i
+        return t
+    else:
+        pass
 
 # Error handling
 def t_ANY_error(t):
