@@ -1,8 +1,9 @@
 import ply.lex as lex
+
 states = (
-    ('doctype', 'exclusive'),
+    #('doctype', 'exclusive'),
     #('code', 'exclusive'),
-    ('tag', 'exclusive'),
+    #('tag', 'exclusive'),
     #('class', 'exclusive'),
     #('attribute', 'exclusive'),
     #('id', 'exclusive'),
@@ -96,45 +97,77 @@ reserved = {
     'meter': 'METER',
     'b': 'B'
 }
+
 # List of token names
 tokens = [
-    'DOCTYPE',
-    'INDENT',
-    'OUTDENT',
-    'TAG', 
+    #'DOCTYPE',
+    #'INDENT',
+    #'OUTDENT',
+    'TAG_NAME',
+    'LPAREN',
+    'RPAREN',
+    'EQUALS',
+    'COMMA',
+    'ATTRIBUTE_NAME',
+    'ATTRIBUTE_VALUE',
+    'TEXT_CONTENT'  ]
     #'CLASS', 
     #'ATTRIBUTE',
     #'PLAIN_TEXT',
     #'DOT',
     #'LPAREN',
     #'RPAREN',
-    #'HASHTAG', # 
-    #'ID_LITERAL', # 
-    #'BEGIN_INTERPOLATION', # #{
-    #'INTERPOLATED_CODE', #
-    #'END_INTERPOLATION', # }
+    #'HASHTAG', 
+    #'ID_LITERAL', 
+    #'BEGIN_INTERPOLATION', 
+    #'INTERPOLATED_CODE', 
+    #'END_INTERPOLATION', 
     #'DASH',
     #'CODE',
     #'DOUBLE_SLASH_DASH',
     #'DOUBLE_SLASH',
     #'UNBUFFERED_COMMENT',
     #'BUFFERED_COMMENT'
-] + list(reserved.values())
+#] + list(reserved.values())
 
-
+"""
 def t_DOCTYPE(t):
-    r'doctype\s+html'
-    t.lexer.begin('doctype')
-    return t
-
-
-def t_doctype_tag_TAG(t):
-    r'[a-z0-9]+'
-    t.type = reserved.get(t.value, 'TAG')
-    t.lexer.begin('tag')
+    r'doctype\ html'
+    #t.lexer.begin('doctype')
     return t
 """
 
+def t_TAG_NAME(t):
+    r'[a-zA-Z][a-zA-Z0-9]*'
+    #t.type = reserved.get(t.value, 'TAG')
+    #t.lexer.begin('tag')
+    return t
+
+def t_LPAREN(t):
+    r'\('
+    return t
+
+def t_ATTRIBUTE_NAME(t):
+    r'[\w\-]+'
+    return t
+
+def t_ATTRIBUTE_VALUE(t):
+    r'".*?"'
+    return t
+
+def t_RPAREN(t):
+    r'\)'
+    return t
+
+def t_EQUALS(t):
+    r'='
+    return t
+
+def t_COMMA(t):
+    r','
+    return t
+
+"""
 def t_ANY_DOUBLE_SLASH_DASH(t):
     r'\/\/\-'
     t.lexer.begin('icomment')
@@ -217,13 +250,17 @@ def t_comment_BUFFERED_COMMENT(t):
     r'.+'
     t.lexer.begin('tag')
     return t
-
-# Ignored characters (whitespace)
-t_attribute_code_ignore = ' '
 """
+# Ignored characters (whitespace)
+t_ignore = ' '
+
+
+
+
 indent_level = 0
-# Handle newlines
-def t_ANY_newline(t):
+
+# Newline handling
+def t_newline(t):
     r'\n[ \t]*'
     global indent_level
     t.lexer.lineno += 1
@@ -242,14 +279,14 @@ def t_ANY_newline(t):
         pass
 
 # Error handling
-def t_ANY_error(t):
+def t_error(t):
     print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
 
 
 lexer = lex.lex()
 
-with open("test_files/test.pug", 'r') as f:
+with open("../test.pug", 'r') as f:
     str = f.read()  
     lexer.input(str)  
 
