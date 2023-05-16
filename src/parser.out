@@ -3,44 +3,62 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 Grammar
 
 Rule 0     S' -> tag
-Rule 1     tag -> TAG_NAME LPAREN attributes RPAREN tag_children
-Rule 2     tag -> TAG_NAME tag_children
-Rule 3     attributes -> attribute COMMA attributes
-Rule 4     attributes -> attribute
-Rule 5     attribute -> ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE
-Rule 6     attribute -> attribute_empty
-Rule 7     attribute_empty -> <empty>
-Rule 8     tag_children -> tag tag_children
-Rule 9     tag_children -> TEXT_CONTENT tag_children
-Rule 10    tag_children -> <empty>
+Rule 1     tag -> TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT INDENT tag
+Rule 2     tag -> TAG_NAME LPAREN attributes RPAREN INDENT tag
+Rule 3     tag -> TAG_NAME TEXT_CONTENT INDENT tag
+Rule 4     tag -> TAG_NAME INDENT tag
+Rule 5     tag -> TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT OUTDENT tag
+Rule 6     tag -> TAG_NAME LPAREN attributes RPAREN OUTDENT tag
+Rule 7     tag -> TAG_NAME TEXT_CONTENT OUTDENT tag
+Rule 8     tag -> TAG_NAME OUTDENT tag
+Rule 9     tag -> TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT OUTDENT
+Rule 10    tag -> TAG_NAME LPAREN attributes RPAREN OUTDENT
+Rule 11    tag -> TAG_NAME TEXT_CONTENT OUTDENT
+Rule 12    tag -> TAG_NAME OUTDENT
+Rule 13    attributes -> attribute COMMA attributes
+Rule 14    attributes -> attribute
+Rule 15    attribute -> ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE
+Rule 16    attribute -> attribute_empty
+Rule 17    attribute_empty -> <empty>
 
 Terminals, with rules where they appear
 
-ATTRIBUTE_NAME       : 5
-ATTRIBUTE_VALUE      : 5
-COMMA                : 3
-EQUALS               : 5
-LPAREN               : 1
-RPAREN               : 1
-TAG_NAME             : 1 2
-TEXT_CONTENT         : 9
+ATTRIBUTE_NAME       : 15
+ATTRIBUTE_VALUE      : 15
+COMMA                : 13
+EQUALS               : 15
+INDENT               : 1 2 3 4
+LPAREN               : 1 2 5 6 9 10
+OUTDENT              : 5 6 7 8 9 10 11 12
+RPAREN               : 1 2 5 6 9 10
+TAG_NAME             : 1 2 3 4 5 6 7 8 9 10 11 12
+TEXT_CONTENT         : 1 3 5 7 9 11
 error                : 
 
 Nonterminals, with rules where they appear
 
-attribute            : 3 4
-attribute_empty      : 6
-attributes           : 1 3
-tag                  : 8 0
-tag_children         : 1 2 8 9
+attribute            : 13 14
+attribute_empty      : 16
+attributes           : 1 2 5 6 9 10 13
+tag                  : 1 2 3 4 5 6 7 8 0
 
 Parsing method: LALR
 
 state 0
 
     (0) S' -> . tag
-    (1) tag -> . TAG_NAME LPAREN attributes RPAREN tag_children
-    (2) tag -> . TAG_NAME tag_children
+    (1) tag -> . TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT INDENT tag
+    (2) tag -> . TAG_NAME LPAREN attributes RPAREN INDENT tag
+    (3) tag -> . TAG_NAME TEXT_CONTENT INDENT tag
+    (4) tag -> . TAG_NAME INDENT tag
+    (5) tag -> . TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT OUTDENT tag
+    (6) tag -> . TAG_NAME LPAREN attributes RPAREN OUTDENT tag
+    (7) tag -> . TAG_NAME TEXT_CONTENT OUTDENT tag
+    (8) tag -> . TAG_NAME OUTDENT tag
+    (9) tag -> . TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT OUTDENT
+    (10) tag -> . TAG_NAME LPAREN attributes RPAREN OUTDENT
+    (11) tag -> . TAG_NAME TEXT_CONTENT OUTDENT
+    (12) tag -> . TAG_NAME OUTDENT
 
     TAG_NAME        shift and go to state 2
 
@@ -54,39 +72,42 @@ state 1
 
 state 2
 
-    (1) tag -> TAG_NAME . LPAREN attributes RPAREN tag_children
-    (2) tag -> TAG_NAME . tag_children
-    (8) tag_children -> . tag tag_children
-    (9) tag_children -> . TEXT_CONTENT tag_children
-    (10) tag_children -> .
-    (1) tag -> . TAG_NAME LPAREN attributes RPAREN tag_children
-    (2) tag -> . TAG_NAME tag_children
+    (1) tag -> TAG_NAME . LPAREN attributes RPAREN TEXT_CONTENT INDENT tag
+    (2) tag -> TAG_NAME . LPAREN attributes RPAREN INDENT tag
+    (3) tag -> TAG_NAME . TEXT_CONTENT INDENT tag
+    (4) tag -> TAG_NAME . INDENT tag
+    (5) tag -> TAG_NAME . LPAREN attributes RPAREN TEXT_CONTENT OUTDENT tag
+    (6) tag -> TAG_NAME . LPAREN attributes RPAREN OUTDENT tag
+    (7) tag -> TAG_NAME . TEXT_CONTENT OUTDENT tag
+    (8) tag -> TAG_NAME . OUTDENT tag
+    (9) tag -> TAG_NAME . LPAREN attributes RPAREN TEXT_CONTENT OUTDENT
+    (10) tag -> TAG_NAME . LPAREN attributes RPAREN OUTDENT
+    (11) tag -> TAG_NAME . TEXT_CONTENT OUTDENT
+    (12) tag -> TAG_NAME . OUTDENT
 
-  ! shift/reduce conflict for TEXT_CONTENT resolved as shift
-  ! shift/reduce conflict for TAG_NAME resolved as shift
     LPAREN          shift and go to state 3
-    TEXT_CONTENT    shift and go to state 6
-    $end            reduce using rule 10 (tag_children -> .)
-    TAG_NAME        shift and go to state 2
+    TEXT_CONTENT    shift and go to state 4
+    INDENT          shift and go to state 5
+    OUTDENT         shift and go to state 6
 
-  ! TEXT_CONTENT    [ reduce using rule 10 (tag_children -> .) ]
-  ! TAG_NAME        [ reduce using rule 10 (tag_children -> .) ]
-
-    tag_children                   shift and go to state 4
-    tag                            shift and go to state 5
 
 state 3
 
-    (1) tag -> TAG_NAME LPAREN . attributes RPAREN tag_children
-    (3) attributes -> . attribute COMMA attributes
-    (4) attributes -> . attribute
-    (5) attribute -> . ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE
-    (6) attribute -> . attribute_empty
-    (7) attribute_empty -> .
+    (1) tag -> TAG_NAME LPAREN . attributes RPAREN TEXT_CONTENT INDENT tag
+    (2) tag -> TAG_NAME LPAREN . attributes RPAREN INDENT tag
+    (5) tag -> TAG_NAME LPAREN . attributes RPAREN TEXT_CONTENT OUTDENT tag
+    (6) tag -> TAG_NAME LPAREN . attributes RPAREN OUTDENT tag
+    (9) tag -> TAG_NAME LPAREN . attributes RPAREN TEXT_CONTENT OUTDENT
+    (10) tag -> TAG_NAME LPAREN . attributes RPAREN OUTDENT
+    (13) attributes -> . attribute COMMA attributes
+    (14) attributes -> . attribute
+    (15) attribute -> . ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE
+    (16) attribute -> . attribute_empty
+    (17) attribute_empty -> .
 
     ATTRIBUTE_NAME  shift and go to state 9
-    COMMA           reduce using rule 7 (attribute_empty -> .)
-    RPAREN          reduce using rule 7 (attribute_empty -> .)
+    COMMA           reduce using rule 17 (attribute_empty -> .)
+    RPAREN          reduce using rule 17 (attribute_empty -> .)
 
     attributes                     shift and go to state 7
     attribute                      shift and go to state 8
@@ -94,180 +115,333 @@ state 3
 
 state 4
 
-    (2) tag -> TAG_NAME tag_children .
+    (3) tag -> TAG_NAME TEXT_CONTENT . INDENT tag
+    (7) tag -> TAG_NAME TEXT_CONTENT . OUTDENT tag
+    (11) tag -> TAG_NAME TEXT_CONTENT . OUTDENT
 
-    $end            reduce using rule 2 (tag -> TAG_NAME tag_children .)
-    TEXT_CONTENT    reduce using rule 2 (tag -> TAG_NAME tag_children .)
-    TAG_NAME        reduce using rule 2 (tag -> TAG_NAME tag_children .)
+    INDENT          shift and go to state 11
+    OUTDENT         shift and go to state 12
 
 
 state 5
 
-    (8) tag_children -> tag . tag_children
-    (8) tag_children -> . tag tag_children
-    (9) tag_children -> . TEXT_CONTENT tag_children
-    (10) tag_children -> .
-    (1) tag -> . TAG_NAME LPAREN attributes RPAREN tag_children
-    (2) tag -> . TAG_NAME tag_children
+    (4) tag -> TAG_NAME INDENT . tag
+    (1) tag -> . TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT INDENT tag
+    (2) tag -> . TAG_NAME LPAREN attributes RPAREN INDENT tag
+    (3) tag -> . TAG_NAME TEXT_CONTENT INDENT tag
+    (4) tag -> . TAG_NAME INDENT tag
+    (5) tag -> . TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT OUTDENT tag
+    (6) tag -> . TAG_NAME LPAREN attributes RPAREN OUTDENT tag
+    (7) tag -> . TAG_NAME TEXT_CONTENT OUTDENT tag
+    (8) tag -> . TAG_NAME OUTDENT tag
+    (9) tag -> . TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT OUTDENT
+    (10) tag -> . TAG_NAME LPAREN attributes RPAREN OUTDENT
+    (11) tag -> . TAG_NAME TEXT_CONTENT OUTDENT
+    (12) tag -> . TAG_NAME OUTDENT
 
-  ! shift/reduce conflict for TEXT_CONTENT resolved as shift
-  ! shift/reduce conflict for TAG_NAME resolved as shift
-    TEXT_CONTENT    shift and go to state 6
-    $end            reduce using rule 10 (tag_children -> .)
     TAG_NAME        shift and go to state 2
 
-  ! TEXT_CONTENT    [ reduce using rule 10 (tag_children -> .) ]
-  ! TAG_NAME        [ reduce using rule 10 (tag_children -> .) ]
-
-    tag                            shift and go to state 5
-    tag_children                   shift and go to state 11
+    tag                            shift and go to state 13
 
 state 6
 
-    (9) tag_children -> TEXT_CONTENT . tag_children
-    (8) tag_children -> . tag tag_children
-    (9) tag_children -> . TEXT_CONTENT tag_children
-    (10) tag_children -> .
-    (1) tag -> . TAG_NAME LPAREN attributes RPAREN tag_children
-    (2) tag -> . TAG_NAME tag_children
+    (8) tag -> TAG_NAME OUTDENT . tag
+    (12) tag -> TAG_NAME OUTDENT .
+    (1) tag -> . TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT INDENT tag
+    (2) tag -> . TAG_NAME LPAREN attributes RPAREN INDENT tag
+    (3) tag -> . TAG_NAME TEXT_CONTENT INDENT tag
+    (4) tag -> . TAG_NAME INDENT tag
+    (5) tag -> . TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT OUTDENT tag
+    (6) tag -> . TAG_NAME LPAREN attributes RPAREN OUTDENT tag
+    (7) tag -> . TAG_NAME TEXT_CONTENT OUTDENT tag
+    (8) tag -> . TAG_NAME OUTDENT tag
+    (9) tag -> . TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT OUTDENT
+    (10) tag -> . TAG_NAME LPAREN attributes RPAREN OUTDENT
+    (11) tag -> . TAG_NAME TEXT_CONTENT OUTDENT
+    (12) tag -> . TAG_NAME OUTDENT
 
-  ! shift/reduce conflict for TEXT_CONTENT resolved as shift
-  ! shift/reduce conflict for TAG_NAME resolved as shift
-    TEXT_CONTENT    shift and go to state 6
-    $end            reduce using rule 10 (tag_children -> .)
+    $end            reduce using rule 12 (tag -> TAG_NAME OUTDENT .)
     TAG_NAME        shift and go to state 2
 
-  ! TEXT_CONTENT    [ reduce using rule 10 (tag_children -> .) ]
-  ! TAG_NAME        [ reduce using rule 10 (tag_children -> .) ]
-
-    tag_children                   shift and go to state 12
-    tag                            shift and go to state 5
+    tag                            shift and go to state 14
 
 state 7
 
-    (1) tag -> TAG_NAME LPAREN attributes . RPAREN tag_children
+    (1) tag -> TAG_NAME LPAREN attributes . RPAREN TEXT_CONTENT INDENT tag
+    (2) tag -> TAG_NAME LPAREN attributes . RPAREN INDENT tag
+    (5) tag -> TAG_NAME LPAREN attributes . RPAREN TEXT_CONTENT OUTDENT tag
+    (6) tag -> TAG_NAME LPAREN attributes . RPAREN OUTDENT tag
+    (9) tag -> TAG_NAME LPAREN attributes . RPAREN TEXT_CONTENT OUTDENT
+    (10) tag -> TAG_NAME LPAREN attributes . RPAREN OUTDENT
 
-    RPAREN          shift and go to state 13
+    RPAREN          shift and go to state 15
 
 
 state 8
 
-    (3) attributes -> attribute . COMMA attributes
-    (4) attributes -> attribute .
+    (13) attributes -> attribute . COMMA attributes
+    (14) attributes -> attribute .
 
-    COMMA           shift and go to state 14
-    RPAREN          reduce using rule 4 (attributes -> attribute .)
+    COMMA           shift and go to state 16
+    RPAREN          reduce using rule 14 (attributes -> attribute .)
 
 
 state 9
 
-    (5) attribute -> ATTRIBUTE_NAME . EQUALS ATTRIBUTE_VALUE
+    (15) attribute -> ATTRIBUTE_NAME . EQUALS ATTRIBUTE_VALUE
 
-    EQUALS          shift and go to state 15
+    EQUALS          shift and go to state 17
 
 
 state 10
 
-    (6) attribute -> attribute_empty .
+    (16) attribute -> attribute_empty .
 
-    COMMA           reduce using rule 6 (attribute -> attribute_empty .)
-    RPAREN          reduce using rule 6 (attribute -> attribute_empty .)
+    COMMA           reduce using rule 16 (attribute -> attribute_empty .)
+    RPAREN          reduce using rule 16 (attribute -> attribute_empty .)
 
 
 state 11
 
-    (8) tag_children -> tag tag_children .
+    (3) tag -> TAG_NAME TEXT_CONTENT INDENT . tag
+    (1) tag -> . TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT INDENT tag
+    (2) tag -> . TAG_NAME LPAREN attributes RPAREN INDENT tag
+    (3) tag -> . TAG_NAME TEXT_CONTENT INDENT tag
+    (4) tag -> . TAG_NAME INDENT tag
+    (5) tag -> . TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT OUTDENT tag
+    (6) tag -> . TAG_NAME LPAREN attributes RPAREN OUTDENT tag
+    (7) tag -> . TAG_NAME TEXT_CONTENT OUTDENT tag
+    (8) tag -> . TAG_NAME OUTDENT tag
+    (9) tag -> . TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT OUTDENT
+    (10) tag -> . TAG_NAME LPAREN attributes RPAREN OUTDENT
+    (11) tag -> . TAG_NAME TEXT_CONTENT OUTDENT
+    (12) tag -> . TAG_NAME OUTDENT
 
-    $end            reduce using rule 8 (tag_children -> tag tag_children .)
-    TEXT_CONTENT    reduce using rule 8 (tag_children -> tag tag_children .)
-    TAG_NAME        reduce using rule 8 (tag_children -> tag tag_children .)
+    TAG_NAME        shift and go to state 2
 
+    tag                            shift and go to state 18
 
 state 12
 
-    (9) tag_children -> TEXT_CONTENT tag_children .
+    (7) tag -> TAG_NAME TEXT_CONTENT OUTDENT . tag
+    (11) tag -> TAG_NAME TEXT_CONTENT OUTDENT .
+    (1) tag -> . TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT INDENT tag
+    (2) tag -> . TAG_NAME LPAREN attributes RPAREN INDENT tag
+    (3) tag -> . TAG_NAME TEXT_CONTENT INDENT tag
+    (4) tag -> . TAG_NAME INDENT tag
+    (5) tag -> . TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT OUTDENT tag
+    (6) tag -> . TAG_NAME LPAREN attributes RPAREN OUTDENT tag
+    (7) tag -> . TAG_NAME TEXT_CONTENT OUTDENT tag
+    (8) tag -> . TAG_NAME OUTDENT tag
+    (9) tag -> . TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT OUTDENT
+    (10) tag -> . TAG_NAME LPAREN attributes RPAREN OUTDENT
+    (11) tag -> . TAG_NAME TEXT_CONTENT OUTDENT
+    (12) tag -> . TAG_NAME OUTDENT
 
-    $end            reduce using rule 9 (tag_children -> TEXT_CONTENT tag_children .)
-    TEXT_CONTENT    reduce using rule 9 (tag_children -> TEXT_CONTENT tag_children .)
-    TAG_NAME        reduce using rule 9 (tag_children -> TEXT_CONTENT tag_children .)
+    $end            reduce using rule 11 (tag -> TAG_NAME TEXT_CONTENT OUTDENT .)
+    TAG_NAME        shift and go to state 2
 
+    tag                            shift and go to state 19
 
 state 13
 
-    (1) tag -> TAG_NAME LPAREN attributes RPAREN . tag_children
-    (8) tag_children -> . tag tag_children
-    (9) tag_children -> . TEXT_CONTENT tag_children
-    (10) tag_children -> .
-    (1) tag -> . TAG_NAME LPAREN attributes RPAREN tag_children
-    (2) tag -> . TAG_NAME tag_children
+    (4) tag -> TAG_NAME INDENT tag .
 
-  ! shift/reduce conflict for TEXT_CONTENT resolved as shift
-  ! shift/reduce conflict for TAG_NAME resolved as shift
-    TEXT_CONTENT    shift and go to state 6
-    $end            reduce using rule 10 (tag_children -> .)
-    TAG_NAME        shift and go to state 2
+    $end            reduce using rule 4 (tag -> TAG_NAME INDENT tag .)
 
-  ! TEXT_CONTENT    [ reduce using rule 10 (tag_children -> .) ]
-  ! TAG_NAME        [ reduce using rule 10 (tag_children -> .) ]
-
-    tag_children                   shift and go to state 16
-    tag                            shift and go to state 5
 
 state 14
 
-    (3) attributes -> attribute COMMA . attributes
-    (3) attributes -> . attribute COMMA attributes
-    (4) attributes -> . attribute
-    (5) attribute -> . ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE
-    (6) attribute -> . attribute_empty
-    (7) attribute_empty -> .
+    (8) tag -> TAG_NAME OUTDENT tag .
 
-    ATTRIBUTE_NAME  shift and go to state 9
-    COMMA           reduce using rule 7 (attribute_empty -> .)
-    RPAREN          reduce using rule 7 (attribute_empty -> .)
+    $end            reduce using rule 8 (tag -> TAG_NAME OUTDENT tag .)
 
-    attribute                      shift and go to state 8
-    attributes                     shift and go to state 17
-    attribute_empty                shift and go to state 10
 
 state 15
 
-    (5) attribute -> ATTRIBUTE_NAME EQUALS . ATTRIBUTE_VALUE
+    (1) tag -> TAG_NAME LPAREN attributes RPAREN . TEXT_CONTENT INDENT tag
+    (2) tag -> TAG_NAME LPAREN attributes RPAREN . INDENT tag
+    (5) tag -> TAG_NAME LPAREN attributes RPAREN . TEXT_CONTENT OUTDENT tag
+    (6) tag -> TAG_NAME LPAREN attributes RPAREN . OUTDENT tag
+    (9) tag -> TAG_NAME LPAREN attributes RPAREN . TEXT_CONTENT OUTDENT
+    (10) tag -> TAG_NAME LPAREN attributes RPAREN . OUTDENT
 
-    ATTRIBUTE_VALUE shift and go to state 18
+    TEXT_CONTENT    shift and go to state 20
+    INDENT          shift and go to state 21
+    OUTDENT         shift and go to state 22
 
 
 state 16
 
-    (1) tag -> TAG_NAME LPAREN attributes RPAREN tag_children .
+    (13) attributes -> attribute COMMA . attributes
+    (13) attributes -> . attribute COMMA attributes
+    (14) attributes -> . attribute
+    (15) attribute -> . ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE
+    (16) attribute -> . attribute_empty
+    (17) attribute_empty -> .
 
-    $end            reduce using rule 1 (tag -> TAG_NAME LPAREN attributes RPAREN tag_children .)
-    TEXT_CONTENT    reduce using rule 1 (tag -> TAG_NAME LPAREN attributes RPAREN tag_children .)
-    TAG_NAME        reduce using rule 1 (tag -> TAG_NAME LPAREN attributes RPAREN tag_children .)
+    ATTRIBUTE_NAME  shift and go to state 9
+    COMMA           reduce using rule 17 (attribute_empty -> .)
+    RPAREN          reduce using rule 17 (attribute_empty -> .)
 
+    attribute                      shift and go to state 8
+    attributes                     shift and go to state 23
+    attribute_empty                shift and go to state 10
 
 state 17
 
-    (3) attributes -> attribute COMMA attributes .
+    (15) attribute -> ATTRIBUTE_NAME EQUALS . ATTRIBUTE_VALUE
 
-    RPAREN          reduce using rule 3 (attributes -> attribute COMMA attributes .)
+    ATTRIBUTE_VALUE shift and go to state 24
 
 
 state 18
 
-    (5) attribute -> ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE .
+    (3) tag -> TAG_NAME TEXT_CONTENT INDENT tag .
 
-    COMMA           reduce using rule 5 (attribute -> ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE .)
-    RPAREN          reduce using rule 5 (attribute -> ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE .)
+    $end            reduce using rule 3 (tag -> TAG_NAME TEXT_CONTENT INDENT tag .)
 
-WARNING: 
-WARNING: Conflicts:
-WARNING: 
-WARNING: shift/reduce conflict for TEXT_CONTENT in state 2 resolved as shift
-WARNING: shift/reduce conflict for TAG_NAME in state 2 resolved as shift
-WARNING: shift/reduce conflict for TEXT_CONTENT in state 5 resolved as shift
-WARNING: shift/reduce conflict for TAG_NAME in state 5 resolved as shift
-WARNING: shift/reduce conflict for TEXT_CONTENT in state 6 resolved as shift
-WARNING: shift/reduce conflict for TAG_NAME in state 6 resolved as shift
-WARNING: shift/reduce conflict for TEXT_CONTENT in state 13 resolved as shift
-WARNING: shift/reduce conflict for TAG_NAME in state 13 resolved as shift
+
+state 19
+
+    (7) tag -> TAG_NAME TEXT_CONTENT OUTDENT tag .
+
+    $end            reduce using rule 7 (tag -> TAG_NAME TEXT_CONTENT OUTDENT tag .)
+
+
+state 20
+
+    (1) tag -> TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT . INDENT tag
+    (5) tag -> TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT . OUTDENT tag
+    (9) tag -> TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT . OUTDENT
+
+    INDENT          shift and go to state 25
+    OUTDENT         shift and go to state 26
+
+
+state 21
+
+    (2) tag -> TAG_NAME LPAREN attributes RPAREN INDENT . tag
+    (1) tag -> . TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT INDENT tag
+    (2) tag -> . TAG_NAME LPAREN attributes RPAREN INDENT tag
+    (3) tag -> . TAG_NAME TEXT_CONTENT INDENT tag
+    (4) tag -> . TAG_NAME INDENT tag
+    (5) tag -> . TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT OUTDENT tag
+    (6) tag -> . TAG_NAME LPAREN attributes RPAREN OUTDENT tag
+    (7) tag -> . TAG_NAME TEXT_CONTENT OUTDENT tag
+    (8) tag -> . TAG_NAME OUTDENT tag
+    (9) tag -> . TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT OUTDENT
+    (10) tag -> . TAG_NAME LPAREN attributes RPAREN OUTDENT
+    (11) tag -> . TAG_NAME TEXT_CONTENT OUTDENT
+    (12) tag -> . TAG_NAME OUTDENT
+
+    TAG_NAME        shift and go to state 2
+
+    tag                            shift and go to state 27
+
+state 22
+
+    (6) tag -> TAG_NAME LPAREN attributes RPAREN OUTDENT . tag
+    (10) tag -> TAG_NAME LPAREN attributes RPAREN OUTDENT .
+    (1) tag -> . TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT INDENT tag
+    (2) tag -> . TAG_NAME LPAREN attributes RPAREN INDENT tag
+    (3) tag -> . TAG_NAME TEXT_CONTENT INDENT tag
+    (4) tag -> . TAG_NAME INDENT tag
+    (5) tag -> . TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT OUTDENT tag
+    (6) tag -> . TAG_NAME LPAREN attributes RPAREN OUTDENT tag
+    (7) tag -> . TAG_NAME TEXT_CONTENT OUTDENT tag
+    (8) tag -> . TAG_NAME OUTDENT tag
+    (9) tag -> . TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT OUTDENT
+    (10) tag -> . TAG_NAME LPAREN attributes RPAREN OUTDENT
+    (11) tag -> . TAG_NAME TEXT_CONTENT OUTDENT
+    (12) tag -> . TAG_NAME OUTDENT
+
+    $end            reduce using rule 10 (tag -> TAG_NAME LPAREN attributes RPAREN OUTDENT .)
+    TAG_NAME        shift and go to state 2
+
+    tag                            shift and go to state 28
+
+state 23
+
+    (13) attributes -> attribute COMMA attributes .
+
+    RPAREN          reduce using rule 13 (attributes -> attribute COMMA attributes .)
+
+
+state 24
+
+    (15) attribute -> ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE .
+
+    COMMA           reduce using rule 15 (attribute -> ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE .)
+    RPAREN          reduce using rule 15 (attribute -> ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE .)
+
+
+state 25
+
+    (1) tag -> TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT INDENT . tag
+    (1) tag -> . TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT INDENT tag
+    (2) tag -> . TAG_NAME LPAREN attributes RPAREN INDENT tag
+    (3) tag -> . TAG_NAME TEXT_CONTENT INDENT tag
+    (4) tag -> . TAG_NAME INDENT tag
+    (5) tag -> . TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT OUTDENT tag
+    (6) tag -> . TAG_NAME LPAREN attributes RPAREN OUTDENT tag
+    (7) tag -> . TAG_NAME TEXT_CONTENT OUTDENT tag
+    (8) tag -> . TAG_NAME OUTDENT tag
+    (9) tag -> . TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT OUTDENT
+    (10) tag -> . TAG_NAME LPAREN attributes RPAREN OUTDENT
+    (11) tag -> . TAG_NAME TEXT_CONTENT OUTDENT
+    (12) tag -> . TAG_NAME OUTDENT
+
+    TAG_NAME        shift and go to state 2
+
+    tag                            shift and go to state 29
+
+state 26
+
+    (5) tag -> TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT OUTDENT . tag
+    (9) tag -> TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT OUTDENT .
+    (1) tag -> . TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT INDENT tag
+    (2) tag -> . TAG_NAME LPAREN attributes RPAREN INDENT tag
+    (3) tag -> . TAG_NAME TEXT_CONTENT INDENT tag
+    (4) tag -> . TAG_NAME INDENT tag
+    (5) tag -> . TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT OUTDENT tag
+    (6) tag -> . TAG_NAME LPAREN attributes RPAREN OUTDENT tag
+    (7) tag -> . TAG_NAME TEXT_CONTENT OUTDENT tag
+    (8) tag -> . TAG_NAME OUTDENT tag
+    (9) tag -> . TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT OUTDENT
+    (10) tag -> . TAG_NAME LPAREN attributes RPAREN OUTDENT
+    (11) tag -> . TAG_NAME TEXT_CONTENT OUTDENT
+    (12) tag -> . TAG_NAME OUTDENT
+
+    $end            reduce using rule 9 (tag -> TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT OUTDENT .)
+    TAG_NAME        shift and go to state 2
+
+    tag                            shift and go to state 30
+
+state 27
+
+    (2) tag -> TAG_NAME LPAREN attributes RPAREN INDENT tag .
+
+    $end            reduce using rule 2 (tag -> TAG_NAME LPAREN attributes RPAREN INDENT tag .)
+
+
+state 28
+
+    (6) tag -> TAG_NAME LPAREN attributes RPAREN OUTDENT tag .
+
+    $end            reduce using rule 6 (tag -> TAG_NAME LPAREN attributes RPAREN OUTDENT tag .)
+
+
+state 29
+
+    (1) tag -> TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT INDENT tag .
+
+    $end            reduce using rule 1 (tag -> TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT INDENT tag .)
+
+
+state 30
+
+    (5) tag -> TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT OUTDENT tag .
+
+    $end            reduce using rule 5 (tag -> TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT OUTDENT tag .)
+

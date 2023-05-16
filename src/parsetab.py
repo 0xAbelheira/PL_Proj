@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'ATTRIBUTE_NAME ATTRIBUTE_VALUE COMMA EQUALS LPAREN RPAREN TAG_NAME TEXT_CONTENT\n    tag : TAG_NAME LPAREN attributes RPAREN tag_children\n        | TAG_NAME tag_children\n    \n    attributes : attribute COMMA attributes \n               | attribute  \n\n    \n    attribute : ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE \n              | attribute_empty\n    attribute_empty : tag_children : tag tag_childrentag_children : TEXT_CONTENT tag_childrentag_children : '
+_lr_signature = 'ATTRIBUTE_NAME ATTRIBUTE_VALUE COMMA EQUALS INDENT LPAREN OUTDENT RPAREN TAG_NAME TEXT_CONTENT\n    tag : TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT INDENT tag\n        | TAG_NAME LPAREN attributes RPAREN INDENT tag\n        | TAG_NAME TEXT_CONTENT INDENT tag\n        | TAG_NAME INDENT tag\n        | TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT OUTDENT tag\n        | TAG_NAME LPAREN attributes RPAREN OUTDENT tag\n        | TAG_NAME TEXT_CONTENT OUTDENT tag\n        | TAG_NAME OUTDENT tag\n        | TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT OUTDENT\n        | TAG_NAME LPAREN attributes RPAREN OUTDENT\n        | TAG_NAME TEXT_CONTENT OUTDENT\n        | TAG_NAME OUTDENT\n    \n    attributes : attribute COMMA attributes\n               | attribute\n    \n    attribute : ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE\n              | attribute_empty\n    \n    attribute_empty :\n    '
     
-_lr_action_items = {'TAG_NAME':([0,2,4,5,6,11,12,13,16,],[2,2,-2,2,2,-8,-9,2,-1,]),'$end':([1,2,4,5,6,11,12,13,16,],[0,-10,-2,-10,-10,-8,-9,-10,-1,]),'LPAREN':([2,],[3,]),'TEXT_CONTENT':([2,4,5,6,11,12,13,16,],[6,-2,6,6,-8,-9,6,-1,]),'ATTRIBUTE_NAME':([3,14,],[9,9,]),'COMMA':([3,8,10,14,18,],[-7,14,-6,-7,-5,]),'RPAREN':([3,7,8,10,14,17,18,],[-7,13,-4,-6,-7,-3,-5,]),'EQUALS':([9,],[15,]),'ATTRIBUTE_VALUE':([15,],[18,]),}
+_lr_action_items = {'TAG_NAME':([0,5,6,11,12,21,22,25,26,],[2,2,2,2,2,2,2,2,2,]),'$end':([1,6,12,13,14,18,19,22,26,27,28,29,30,],[0,-12,-11,-4,-8,-3,-7,-10,-9,-2,-6,-1,-5,]),'LPAREN':([2,],[3,]),'TEXT_CONTENT':([2,15,],[4,20,]),'INDENT':([2,4,15,20,],[5,11,21,25,]),'OUTDENT':([2,4,15,20,],[6,12,22,26,]),'ATTRIBUTE_NAME':([3,16,],[9,9,]),'COMMA':([3,8,10,16,24,],[-17,16,-16,-17,-15,]),'RPAREN':([3,7,8,10,16,23,24,],[-17,15,-14,-16,-17,-13,-15,]),'EQUALS':([9,],[17,]),'ATTRIBUTE_VALUE':([17,],[24,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'tag':([0,2,5,6,13,],[1,5,5,5,5,]),'tag_children':([2,5,6,13,],[4,11,12,16,]),'attributes':([3,14,],[7,17,]),'attribute':([3,14,],[8,8,]),'attribute_empty':([3,14,],[10,10,]),}
+_lr_goto_items = {'tag':([0,5,6,11,12,21,22,25,26,],[1,13,14,18,19,27,28,29,30,]),'attributes':([3,16,],[7,23,]),'attribute':([3,16,],[8,8,]),'attribute_empty':([3,16,],[10,10,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,14 +27,21 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> tag","S'",1,None,None,None),
-  ('tag -> TAG_NAME LPAREN attributes RPAREN tag_children','tag',5,'p_tag','pugsyn.py',48),
-  ('tag -> TAG_NAME tag_children','tag',2,'p_tag','pugsyn.py',49),
-  ('attributes -> attribute COMMA attributes','attributes',3,'p_attributes','pugsyn.py',56),
-  ('attributes -> attribute','attributes',1,'p_attributes','pugsyn.py',57),
-  ('attribute -> ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE','attribute',3,'p_attribute','pugsyn.py',64),
-  ('attribute -> attribute_empty','attribute',1,'p_attribute','pugsyn.py',65),
-  ('attribute_empty -> <empty>','attribute_empty',0,'p_attribute_empty','pugsyn.py',71),
-  ('tag_children -> tag tag_children','tag_children',2,'p_tag_children','pugsyn.py',75),
-  ('tag_children -> TEXT_CONTENT tag_children','tag_children',2,'p_tag_children_text','pugsyn.py',79),
-  ('tag_children -> <empty>','tag_children',0,'p_tag_children_empty','pugsyn.py',83),
+  ('tag -> TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT INDENT tag','tag',7,'p_tag','yacc.py',10),
+  ('tag -> TAG_NAME LPAREN attributes RPAREN INDENT tag','tag',6,'p_tag','yacc.py',11),
+  ('tag -> TAG_NAME TEXT_CONTENT INDENT tag','tag',4,'p_tag','yacc.py',12),
+  ('tag -> TAG_NAME INDENT tag','tag',3,'p_tag','yacc.py',13),
+  ('tag -> TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT OUTDENT tag','tag',7,'p_tag','yacc.py',14),
+  ('tag -> TAG_NAME LPAREN attributes RPAREN OUTDENT tag','tag',6,'p_tag','yacc.py',15),
+  ('tag -> TAG_NAME TEXT_CONTENT OUTDENT tag','tag',4,'p_tag','yacc.py',16),
+  ('tag -> TAG_NAME OUTDENT tag','tag',3,'p_tag','yacc.py',17),
+  ('tag -> TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT OUTDENT','tag',6,'p_tag','yacc.py',18),
+  ('tag -> TAG_NAME LPAREN attributes RPAREN OUTDENT','tag',5,'p_tag','yacc.py',19),
+  ('tag -> TAG_NAME TEXT_CONTENT OUTDENT','tag',3,'p_tag','yacc.py',20),
+  ('tag -> TAG_NAME OUTDENT','tag',2,'p_tag','yacc.py',21),
+  ('attributes -> attribute COMMA attributes','attributes',3,'p_attributes','yacc.py',58),
+  ('attributes -> attribute','attributes',1,'p_attributes','yacc.py',59),
+  ('attribute -> ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE','attribute',3,'p_attribute','yacc.py',69),
+  ('attribute -> attribute_empty','attribute',1,'p_attribute','yacc.py',70),
+  ('attribute_empty -> <empty>','attribute_empty',0,'p_attribute_empty','yacc.py',77),
 ]
