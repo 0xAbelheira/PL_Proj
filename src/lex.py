@@ -51,7 +51,7 @@ def t_attribute_COMMA(t):
 
 def t_tag_TEXT_CONTENT(t):
     r'[^# \t\n]+'
-    lexer.pop_state()
+    t.lexer.pop_state()
     return t
 
 t_ANY_ignore = ' '
@@ -78,15 +78,8 @@ def t_ANY_newline(t):
         pass
 
 # Error handling
-def t_error(t):
+def t_ANY_error(t):
     print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
 
 lexer = lex.lex()
-
-with open("../test.pug", 'r') as f:
-    str = f.read()  
-    lexer.input(str)  
-
-while tok := lexer.token():
-    print(tok)
