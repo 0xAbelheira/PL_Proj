@@ -101,8 +101,8 @@ reserved = {
 # List of token names
 tokens = [
     #'DOCTYPE',
-    #'INDENT',
-    #'OUTDENT',
+    'INDENT',
+    'OUTDENT',
     'TAG_NAME',
     'LPAREN',
     'RPAREN',
