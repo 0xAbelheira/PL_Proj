@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'ATTRIBUTE_NAME ATTRIBUTE_VALUE COMMA EQUALS INDENT LPAREN OUTDENT RPAREN TAG_NAME TEXT_CONTENT\n    tag : TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT INDENT tag\n        | TAG_NAME LPAREN attributes RPAREN INDENT tag\n        | TAG_NAME TEXT_CONTENT INDENT tag\n        | TAG_NAME INDENT tag\n        | tag_emtpy\n    \n    tag_emtpy :\n    \n    attributes : attribute COMMA attributes\n               | attribute\n    \n    attribute : ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE\n              | attribute_empty\n    \n    attribute_empty :\n    '
+_lr_signature = 'ATTRIBUTE_NAME ATTRIBUTE_VALUE COMMA DOT EQUALS HASHTAG INDENT LPAREN OUTDENT RPAREN SPACE SPECIAL_ATTRIBUTE TAG_NAME TEXT \n    tag : TAG_NAME attributes text INDENT tag \n        | TAG_NAME attributes INDENT tag\n        | TAG_NAME text INDENT tag\n        | TAG_NAME INDENT tag\n        | TAG_NAME attributes text\n        | TAG_NAME text\n        | tag_emtpy\n    \n    text : SPACE TEXT\n    \n    attributes : LPAREN attributes_list RPAREN\n               | class_attribute\n               | id_attribute\n    \n    class_attribute : DOT SPECIAL_ATTRIBUTE id_attribute\n                    | class_attribute_empty\n    \n    id_attribute : HASHTAG SPECIAL_ATTRIBUTE class_attribute\n                 | id_attribute_empty\n    \n    class_attribute_empty :\n    \n    id_attribute_empty :\n    \n    tag_emtpy :\n    \n    attributes_list : attribute COMMA attributes_list\n                    | attribute\n    \n    attribute : ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE\n              | attribute_empty\n    \n    attribute_empty :\n    '
     
-_lr_action_items = {'TAG_NAME':([0,6,11,18,21,],[2,2,2,2,2,]),'$end':([0,1,3,6,11,12,16,18,21,22,23,],[-6,0,-5,-6,-6,-4,-3,-6,-6,-2,-1,]),'LPAREN':([2,],[4,]),'TEXT_CONTENT':([2,13,],[5,17,]),'INDENT':([2,5,13,17,],[6,11,18,21,]),'ATTRIBUTE_NAME':([4,14,],[9,9,]),'COMMA':([4,8,10,14,20,],[-11,14,-10,-11,-9,]),'RPAREN':([4,7,8,10,14,19,20,],[-11,13,-8,-10,-11,-7,-9,]),'EQUALS':([9,],[15,]),'ATTRIBUTE_VALUE':([15,],[20,]),}
+_lr_action_items = {'TAG_NAME':([0,6,16,17,26,],[2,2,2,2,2,]),'$end':([0,1,3,5,6,15,16,17,18,23,26,27,28,34,],[-18,0,-7,-6,-18,-5,-18,-18,-4,-8,-18,-2,-3,-1,]),'INDENT':([2,4,5,8,9,12,14,15,23,24,25,29,32,33,],[6,16,17,-10,-11,-13,-15,26,-8,-17,-16,-9,-12,-14,]),'LPAREN':([2,],[7,]),'SPACE':([2,4,8,9,12,14,24,25,29,32,33,],[10,10,-10,-11,-13,-15,-17,-16,-9,-12,-14,]),'DOT':([2,25,],[11,11,]),'HASHTAG':([2,24,],[13,13,]),'ATTRIBUTE_NAME':([7,30,],[21,21,]),'COMMA':([7,20,22,30,36,],[-23,30,-22,-23,-21,]),'RPAREN':([7,19,20,22,30,35,36,],[-23,29,-20,-22,-23,-19,-21,]),'TEXT':([10,],[23,]),'SPECIAL_ATTRIBUTE':([11,13,],[24,25,]),'EQUALS':([21,],[31,]),'ATTRIBUTE_VALUE':([31,],[36,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'tag':([0,6,11,18,21,],[1,12,16,22,23,]),'tag_emtpy':([0,6,11,18,21,],[3,3,3,3,3,]),'attributes':([4,14,],[7,19,]),'attribute':([4,14,],[8,8,]),'attribute_empty':([4,14,],[10,10,]),}
+_lr_goto_items = {'tag':([0,6,16,17,26,],[1,18,27,28,34,]),'tag_emtpy':([0,6,16,17,26,],[3,3,3,3,3,]),'attributes':([2,],[4,]),'text':([2,4,],[5,15,]),'class_attribute':([2,25,],[8,33,]),'id_attribute':([2,24,],[9,32,]),'class_attribute_empty':([2,25,],[12,12,]),'id_attribute_empty':([2,24,],[14,14,]),'attributes_list':([7,30,],[19,35,]),'attribute':([7,30,],[20,20,]),'attribute_empty':([7,30,],[22,22,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,15 +27,27 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> tag","S'",1,None,None,None),
-  ('tag -> TAG_NAME LPAREN attributes RPAREN TEXT_CONTENT INDENT tag','tag',7,'p_tag','yacc.py',10),
-  ('tag -> TAG_NAME LPAREN attributes RPAREN INDENT tag','tag',6,'p_tag','yacc.py',11),
-  ('tag -> TAG_NAME TEXT_CONTENT INDENT tag','tag',4,'p_tag','yacc.py',12),
+  ('tag -> TAG_NAME attributes text INDENT tag','tag',5,'p_tag','yacc.py',10),
+  ('tag -> TAG_NAME attributes INDENT tag','tag',4,'p_tag','yacc.py',11),
+  ('tag -> TAG_NAME text INDENT tag','tag',4,'p_tag','yacc.py',12),
   ('tag -> TAG_NAME INDENT tag','tag',3,'p_tag','yacc.py',13),
-  ('tag -> tag_emtpy','tag',1,'p_tag','yacc.py',14),
-  ('tag_emtpy -> <empty>','tag_emtpy',0,'p_tag_emtpy','yacc.py',33),
-  ('attributes -> attribute COMMA attributes','attributes',3,'p_attributes','yacc.py',39),
-  ('attributes -> attribute','attributes',1,'p_attributes','yacc.py',40),
-  ('attribute -> ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE','attribute',3,'p_attribute','yacc.py',50),
-  ('attribute -> attribute_empty','attribute',1,'p_attribute','yacc.py',51),
-  ('attribute_empty -> <empty>','attribute_empty',0,'p_attribute_empty','yacc.py',58),
+  ('tag -> TAG_NAME attributes text','tag',3,'p_tag','yacc.py',14),
+  ('tag -> TAG_NAME text','tag',2,'p_tag','yacc.py',15),
+  ('tag -> tag_emtpy','tag',1,'p_tag','yacc.py',16),
+  ('text -> SPACE TEXT','text',2,'p_text','yacc.py',33),
+  ('attributes -> LPAREN attributes_list RPAREN','attributes',3,'p_attributes','yacc.py',39),
+  ('attributes -> class_attribute','attributes',1,'p_attributes','yacc.py',40),
+  ('attributes -> id_attribute','attributes',1,'p_attributes','yacc.py',41),
+  ('class_attribute -> DOT SPECIAL_ATTRIBUTE id_attribute','class_attribute',3,'p_class_attribute','yacc.py',50),
+  ('class_attribute -> class_attribute_empty','class_attribute',1,'p_class_attribute','yacc.py',51),
+  ('id_attribute -> HASHTAG SPECIAL_ATTRIBUTE class_attribute','id_attribute',3,'p_id_attribute','yacc.py',60),
+  ('id_attribute -> id_attribute_empty','id_attribute',1,'p_id_attribute','yacc.py',61),
+  ('class_attribute_empty -> <empty>','class_attribute_empty',0,'p_class_attribute_emtpy','yacc.py',70),
+  ('id_attribute_empty -> <empty>','id_attribute_empty',0,'p_id_attribute_empty','yacc.py',76),
+  ('tag_emtpy -> <empty>','tag_emtpy',0,'p_tag_emtpy','yacc.py',82),
+  ('attributes_list -> attribute COMMA attributes_list','attributes_list',3,'p_attributes_list','yacc.py',88),
+  ('attributes_list -> attribute','attributes_list',1,'p_attributes_list','yacc.py',89),
+  ('attribute -> ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE','attribute',3,'p_attribute','yacc.py',98),
+  ('attribute -> attribute_empty','attribute',1,'p_attribute','yacc.py',99),
+  ('attribute_empty -> <empty>','attribute_empty',0,'p_attribute_empty','yacc.py',106),
 ]
