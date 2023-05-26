@@ -2,7 +2,8 @@ import ply.lex as lex
 
 states = (
     ('tag', 'exclusive'),
-    ('attribute', 'exclusive')
+    ('attribute', 'exclusive'),
+    ('special', 'exclusive')
 )
 
 tokens = [
@@ -11,16 +12,35 @@ tokens = [
     'RPAREN',
     'EQUALS',
     'COMMA',
-    'TEXT_CONTENT',
+    'TEXT',
     'ATTRIBUTE_NAME',
     'ATTRIBUTE_VALUE',
     'INDENT',
-    'OUTDENT'
+    'OUTDENT',
+    'DOT',
+    'HASHTAG',
+    'SPACE',
+    'SPECIAL_ATTRIBUTE'
 ]
 
 def t_TAG_NAME(t):
     r'[a-zA-Z][a-zA-Z0-9]*'
     lexer.push_state('tag')
+    return t
+
+def t_tag_DOT(t):
+    r'\.'
+    lexer.push_state('special')
+    return t
+
+def t_tag_HASHTAG(t):
+    r'\#'
+    lexer.push_state('special')
+    return t
+
+def t_special_SPECIAL_ATTRIBUTE(t):
+    r'[^\s\.\#]+'
+    lexer.pop_state()
     return t
 
 def t_tag_LPAREN(t):
@@ -36,11 +56,6 @@ def t_attribute_ATTRIBUTE_VALUE(t):
     r'".*?"'
     return t
 
-def t_attribute_RPAREN(t):
-    r'\)'
-    lexer.pop_state()
-    return t
-
 def t_attribute_EQUALS(t):
     r'='
     return t
@@ -49,12 +64,21 @@ def t_attribute_COMMA(t):
     r','
     return t
 
-def t_tag_TEXT_CONTENT(t):
-    r'[^# \t\n]+'
+def t_attribute_RPAREN(t):
+    r'\)'
+    lexer.pop_state()
+    return t
+
+def t_tag_TEXT(t):
+    r'[^\s][^#\n]+'
     t.lexer.pop_state()
     return t
 
-t_ANY_ignore = ' '
+def t_tag_SPACE(t):
+    r'\s'
+    return t
+
+t_ANY_ignore = ''
 
 indent_level = 0
 
