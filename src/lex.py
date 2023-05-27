@@ -39,7 +39,7 @@ def t_tag_HASHTAG(t):
     return t
 
 def t_special_SPECIAL_ATTRIBUTE(t):
-    r'[^\s\.\#]+'
+    r'[^\ \.\#\(\)]+'
     lexer.pop_state()
     return t
 
@@ -70,12 +70,12 @@ def t_attribute_RPAREN(t):
     return t
 
 def t_tag_TEXT(t):
-    r'[^\s][^#\n]+'
+    r'[^\ ][^#\n]+'
     t.lexer.pop_state()
     return t
 
 def t_tag_SPACE(t):
-    r'\s'
+    r'\ '
     return t
 
 t_ANY_ignore = ''
