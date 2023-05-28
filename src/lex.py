@@ -18,6 +18,7 @@ tokens = [
     'ATTRIBUTE_VALUE',
     'INDENT',
     'OUTDENT',
+    'NODENT',
     'DOT',
     'HASHTAG',
     'SPACE',
@@ -35,10 +36,15 @@ def t_ANY_newline(t):
     global indent_level
     t.lexer.lineno += 1
     i = len(t.value) - 1
-    if (t.value[-1] != '\n') and (i != indent_level):
+    t.lexer.begin('INITIAL')
+
+    if (i == indent_level):
+        t.type = 'NODENT'
+        t.value = i
+        return t
+    elif (t.value[-1] != '\n'):
         if i > indent_level:
             t.type = 'INDENT' 
-            t.lexer.begin('INITIAL')
             t.value = i
             indent_level = i
         elif i < indent_level:
@@ -133,7 +139,7 @@ def t_ANY_error(t):
 
 lexer = lex.lex()
 
-"""
+'''
 with open("../test.pug", 'r') as f:
     lines = ""
     for line in f.readlines():
@@ -141,4 +147,4 @@ with open("../test.pug", 'r') as f:
     lexer.input(lines)
     for tok in lexer:
         print(tok)
-        """
+'''

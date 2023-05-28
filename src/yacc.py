@@ -6,23 +6,26 @@ from lex import tokens
 prev_lineno = 0
 dent_level = 0
 
+stack = Stack()
 
 def p_line(p):
     '''
-    line : tag dent line
-         | tag line_empty
+    line : dent tag line
+         | tag line
+         | dent_tag_aux
     '''
-    p[0] = p[1] 
     if len(p) == 4:
-        print(dent_level)
-        if p[2] == 0:
-            # indent
-            p[1].add_child(p[3])
-        elif p[2] > 0:
-            # outdent
-            for _ in range(0, p[2]):
-                parent = p[1].parent
-            parent.add_child(p[3])
+        stack.push(p[2], p[1])
+    elif len(p) == 3:
+        stack.push(p[1], 0)
+        p[0] = stack.stack[0][0]
+
+def p_dent_tag_aux(p):
+    '''
+    dent_tag_aux : dent tag
+    '''
+    stack.push(p[2], p[1])
+
 
 def p_line_empty(p):
     '''
@@ -34,6 +37,7 @@ def p_dent(p):
     '''
     dent : indent
          | outdent
+         | nodent
     '''
     p[0] = p[1]
 
@@ -41,18 +45,23 @@ def p_indent(p):
     '''
     indent : INDENT
     '''
-    p[0] = 0
     global dent_level 
     dent_level += 1
+    p[0] = dent_level
 
 def p_outdent(p):
     '''
     outdent : OUTDENT
     '''
     global dent_level
-    new_dent_level = p[1] // 4
-    p[0] = dent_level - new_dent_level
-    dent_level = new_dent_level
+    p[0] = p[1] // 4
+
+def p_nodent(p):
+    '''
+    nodent : NODENT
+    '''
+    global dent_level
+    p[0] = dent_level
 
 def p_tag(p):
     '''
@@ -176,7 +185,10 @@ def p_text(p):
     text : SPACE TEXT
          | text_empty
     '''
-    p[0] = p[2]
+    if len(p) == 3:
+        p[0] = p[2]
+    else:
+        p[0] = p[1]
 
 def p_text_emtpy(p):
     '''
@@ -189,10 +201,10 @@ def p_error(p):
 
 parser = yacc.yacc()
 
-with open("../test.pug", 'r') as f:
+with open("test.pug", 'r') as f:
     code = f.read()
     output = parser.parse(code, debug=True)
-    print(output, repr(output), sep='\n')
+    print(repr(output), sep='\n')
 
-with open("../test.html", 'w') as f:
+with open("test.html", 'w') as f:
     f.write(repr(output))

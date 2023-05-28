@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'ATTRIBUTE_NAME ATTRIBUTE_VALUE COMMA DOT EQUALS HASHTAG INDENT LPAREN OUTDENT RPAREN SPACE SPECIAL_ATTRIBUTE TAG_NAME TEXT\n    line : tag dent line\n         | tag line_empty\n    \n    line_empty : \n    \n    dent : indent\n         | outdent\n    \n    indent : INDENT\n    \n    outdent : OUTDENT\n    \n    tag : TAG_NAME inside_tag \n        | div_tag\n    \n    div_tag : inside_tag\n    \n    inside_tag : attributes_aux text\n    \n    attributes_aux : attributes\n                   | attribute_empty\n    \n    tag_empty :\n    \n    attributes : LPAREN attributes_list RPAREN special_attribute\n               | special_attribute attributes\n               | special_attribute attribute_empty\n               | attribute_empty\n    \n    attributes_list : attribute COMMA attributes_list\n                    | attribute\n    \n    attribute : ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE\n              | attribute_empty\n    \n    attribute_empty :\n    \n    special_attribute : class_attribute\n                      | id_attribute\n    \n    class_attribute : DOT SPECIAL_ATTRIBUTE id_attribute\n                    | class_attribute_empty\n    \n    id_attribute : HASHTAG SPECIAL_ATTRIBUTE class_attribute\n                 | id_attribute_empty\n    \n    class_attribute_empty :\n    \n    id_attribute_empty :\n    \n    text : SPACE TEXT\n         | text_empty\n    \n    text_empty :\n    '
+_lr_signature = 'ATTRIBUTE_NAME ATTRIBUTE_VALUE COMMA DOT EQUALS HASHTAG INDENT LPAREN NODENT OUTDENT RPAREN SPACE SPECIAL_ATTRIBUTE TAG_NAME TEXT\n    line : dent tag line\n         | tag line\n         | dent_tag_aux\n    \n    dent_tag_aux : dent tag\n    \n    line_empty : \n    \n    dent : indent\n         | outdent\n         | nodent\n    \n    indent : INDENT\n    \n    outdent : OUTDENT\n    \n    nodent : NODENT\n    \n    tag : TAG_NAME inside_tag \n        | div_tag\n    \n    div_tag : inside_tag\n    \n    inside_tag : attributes_aux text\n    \n    attributes_aux : attributes\n                   | attribute_empty\n    \n    tag_empty :\n    \n    attributes : LPAREN attributes_list RPAREN special_attribute\n               | special_attribute attributes\n               | special_attribute attribute_empty\n               | attribute_empty\n    \n    attributes_list : attribute COMMA attributes_list\n                    | attribute\n    \n    attribute : ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE\n              | attribute_empty\n    \n    attribute_empty :\n    \n    special_attribute : class_attribute\n                      | id_attribute\n    \n    class_attribute : DOT SPECIAL_ATTRIBUTE id_attribute\n                    | class_attribute_empty\n    \n    id_attribute : HASHTAG SPECIAL_ATTRIBUTE class_attribute\n                 | id_attribute_empty\n    \n    class_attribute_empty :\n    \n    id_attribute_empty :\n    \n    text : SPACE TEXT\n         | text_empty\n    \n    text_empty :\n    '
     
-_lr_action_items = {'TAG_NAME':([0,17,19,20,21,22,],[3,3,-4,-5,-6,-7,]),'LPAREN':([0,3,10,11,12,14,16,17,19,20,21,22,33,34,40,41,],[9,9,9,-24,-25,-27,-29,9,-4,-5,-6,-7,-31,-30,-26,-28,]),'SPACE':([0,3,6,7,8,10,11,12,14,16,17,19,20,21,22,31,32,33,34,37,40,41,42,],[-23,-23,25,-12,-13,-23,-24,-25,-27,-29,-23,-4,-5,-6,-7,-16,-17,-31,-30,-30,-26,-28,-15,]),'INDENT':([0,2,3,4,5,6,7,8,10,11,12,14,16,17,19,20,21,22,23,24,26,31,32,33,34,36,37,40,41,42,],[-23,21,-23,-10,-9,-34,-12,-13,-23,-24,-25,-27,-29,-23,-4,-5,-6,-7,-8,-11,-33,-16,-17,-31,-30,-32,-30,-26,-28,-15,]),'OUTDENT':([0,2,3,4,5,6,7,8,10,11,12,14,16,17,19,20,21,22,23,24,26,31,32,33,34,36,37,40,41,42,],[-23,22,-23,-10,-9,-34,-12,-13,-23,-24,-25,-27,-29,-23,-4,-5,-6,-7,-8,-11,-33,-16,-17,-31,-30,-32,-30,-26,-28,-15,]),'$end':([0,1,2,3,4,5,6,7,8,10,11,12,14,16,17,18,19,20,21,22,23,24,26,31,32,33,34,35,36,37,40,41,42,],[-23,0,-3,-23,-10,-9,-34,-12,-13,-23,-24,-25,-27,-29,-23,-2,-4,-5,-6,-7,-8,-11,-33,-16,-17,-31,-30,-1,-32,-30,-26,-28,-15,]),'DOT':([0,3,10,11,12,14,16,17,19,20,21,22,33,34,37,40,41,],[13,13,13,-24,-25,-27,-29,13,-4,-5,-6,-7,-31,13,13,-26,-28,]),'HASHTAG':([0,3,10,11,12,14,16,17,19,20,21,22,33,34,37,40,41,],[15,15,15,-24,-25,-27,-29,15,-4,-5,-6,-7,15,-30,15,-26,-28,]),'ATTRIBUTE_NAME':([9,38,],[29,29,]),'COMMA':([9,28,30,38,44,],[-23,38,-22,-23,-21,]),'RPAREN':([9,27,28,30,38,43,44,],[-23,37,-20,-22,-23,-19,-21,]),'SPECIAL_ATTRIBUTE':([13,15,],[33,34,]),'TEXT':([25,],[36,]),'EQUALS':([29,],[39,]),'ATTRIBUTE_VALUE':([39,],[44,]),}
+_lr_action_items = {'TAG_NAME':([0,2,3,5,6,7,8,9,10,11,12,13,14,15,16,18,19,20,22,24,25,27,28,30,35,36,37,38,40,41,44,45,46,],[8,8,8,-6,-7,-8,-27,-14,-13,-9,-10,-11,-38,-16,-17,-27,-28,-29,-31,-33,8,-12,-15,-37,-20,-21,-35,-34,-36,-34,-30,-32,-19,]),'INDENT':([0,2,3,5,6,7,8,9,10,11,12,13,14,15,16,18,19,20,22,24,25,27,28,30,35,36,37,38,40,41,44,45,46,],[11,-27,11,-6,-7,-8,-27,-14,-13,-9,-10,-11,-38,-16,-17,-27,-28,-29,-31,-33,11,-12,-15,-37,-20,-21,-35,-34,-36,-34,-30,-32,-19,]),'OUTDENT':([0,2,3,5,6,7,8,9,10,11,12,13,14,15,16,18,19,20,22,24,25,27,28,30,35,36,37,38,40,41,44,45,46,],[12,-27,12,-6,-7,-8,-27,-14,-13,-9,-10,-11,-38,-16,-17,-27,-28,-29,-31,-33,12,-12,-15,-37,-20,-21,-35,-34,-36,-34,-30,-32,-19,]),'NODENT':([0,2,3,5,6,7,8,9,10,11,12,13,14,15,16,18,19,20,22,24,25,27,28,30,35,36,37,38,40,41,44,45,46,],[13,-27,13,-6,-7,-8,-27,-14,-13,-9,-10,-11,-38,-16,-17,-27,-28,-29,-31,-33,13,-12,-15,-37,-20,-21,-35,-34,-36,-34,-30,-32,-19,]),'LPAREN':([0,2,3,5,6,7,8,9,10,11,12,13,14,15,16,18,19,20,22,24,25,27,28,30,35,36,37,38,40,41,44,45,46,],[17,17,17,-6,-7,-8,17,-14,-13,-9,-10,-11,-38,-16,-17,17,-28,-29,-31,-33,17,-12,-15,-37,-20,-21,-35,-34,-36,-34,-30,-32,-19,]),'SPACE':([0,2,3,5,6,7,8,9,10,11,12,13,14,15,16,18,19,20,22,24,25,27,28,30,35,36,37,38,40,41,44,45,46,],[-27,-27,-27,-6,-7,-8,-27,-14,-13,-9,-10,-11,29,-16,-17,-27,-28,-29,-31,-33,-27,-12,-15,-37,-20,-21,-35,-34,-36,-34,-30,-32,-19,]),'DOT':([0,2,3,5,6,7,8,9,10,11,12,13,14,15,16,18,19,20,22,24,25,27,28,30,35,36,37,38,40,41,44,45,46,],[21,21,21,-6,-7,-8,21,-14,-13,-9,-10,-11,-38,-16,-17,21,-28,-29,-31,-33,21,-12,-15,-37,-20,-21,-35,21,-36,21,-30,-32,-19,]),'HASHTAG':([0,2,3,5,6,7,8,9,10,11,12,13,14,15,16,18,19,20,22,24,25,27,28,30,35,36,37,38,40,41,44,45,46,],[23,23,23,-6,-7,-8,23,-14,-13,-9,-10,-11,-38,-16,-17,23,-28,-29,-31,-33,23,-12,-15,-37,-20,-21,23,-34,-36,23,-30,-32,-19,]),'$end':([1,2,4,5,6,7,8,9,10,11,12,13,14,15,16,18,19,20,22,24,25,26,27,28,30,35,36,37,38,39,40,41,44,45,46,],[0,-27,-3,-6,-7,-8,-27,-14,-13,-9,-10,-11,-38,-16,-17,-27,-28,-29,-31,-33,-4,-2,-12,-15,-37,-20,-21,-35,-34,-1,-36,-34,-30,-32,-19,]),'ATTRIBUTE_NAME':([17,42,],[33,33,]),'COMMA':([17,32,34,42,48,],[-27,42,-26,-27,-25,]),'RPAREN':([17,31,32,34,42,47,48,],[-27,41,-24,-26,-27,-23,-25,]),'SPECIAL_ATTRIBUTE':([21,23,],[37,38,]),'TEXT':([29,],[40,]),'EQUALS':([33,],[43,]),'ATTRIBUTE_VALUE':([43,],[48,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'line':([0,17,],[1,35,]),'tag':([0,17,],[2,2,]),'inside_tag':([0,3,17,],[4,23,4,]),'div_tag':([0,17,],[5,5,]),'attributes_aux':([0,3,17,],[6,6,6,]),'attributes':([0,3,10,17,],[7,7,31,7,]),'attribute_empty':([0,3,9,10,17,38,],[8,8,30,32,8,30,]),'special_attribute':([0,3,10,17,37,],[10,10,10,10,42,]),'class_attribute':([0,3,10,17,34,37,],[11,11,11,11,41,11,]),'id_attribute':([0,3,10,17,33,37,],[12,12,12,12,40,12,]),'class_attribute_empty':([0,3,10,17,34,37,],[14,14,14,14,14,14,]),'id_attribute_empty':([0,3,10,17,33,37,],[16,16,16,16,16,16,]),'dent':([2,],[17,]),'line_empty':([2,],[18,]),'indent':([2,],[19,]),'outdent':([2,],[20,]),'text':([6,],[24,]),'text_empty':([6,],[26,]),'attributes_list':([9,38,],[27,43,]),'attribute':([9,38,],[28,28,]),}
+_lr_goto_items = {'line':([0,3,25,],[1,26,39,]),'dent':([0,3,25,],[2,2,2,]),'tag':([0,2,3,25,],[3,25,3,3,]),'dent_tag_aux':([0,3,25,],[4,4,4,]),'indent':([0,3,25,],[5,5,5,]),'outdent':([0,3,25,],[6,6,6,]),'nodent':([0,3,25,],[7,7,7,]),'inside_tag':([0,2,3,8,25,],[9,9,9,27,9,]),'div_tag':([0,2,3,25,],[10,10,10,10,]),'attributes_aux':([0,2,3,8,25,],[14,14,14,14,14,]),'attributes':([0,2,3,8,18,25,],[15,15,15,15,35,15,]),'attribute_empty':([0,2,3,8,17,18,25,42,],[16,16,16,16,34,36,16,34,]),'special_attribute':([0,2,3,8,18,25,41,],[18,18,18,18,18,18,46,]),'class_attribute':([0,2,3,8,18,25,38,41,],[19,19,19,19,19,19,45,19,]),'id_attribute':([0,2,3,8,18,25,37,41,],[20,20,20,20,20,20,44,20,]),'class_attribute_empty':([0,2,3,8,18,25,38,41,],[22,22,22,22,22,22,22,22,]),'id_attribute_empty':([0,2,3,8,18,25,37,41,],[24,24,24,24,24,24,24,24,]),'text':([14,],[28,]),'text_empty':([14,],[30,]),'attributes_list':([17,42,],[31,47,]),'attribute':([17,42,],[32,32,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,38 +27,42 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> line","S'",1,None,None,None),
-  ('line -> tag dent line','line',3,'p_line','yacc.py',12),
-  ('line -> tag line_empty','line',2,'p_line','yacc.py',13),
-  ('line_empty -> <empty>','line_empty',0,'p_line_empty','yacc.py',29),
-  ('dent -> indent','dent',1,'p_dent','yacc.py',35),
-  ('dent -> outdent','dent',1,'p_dent','yacc.py',36),
-  ('indent -> INDENT','indent',1,'p_indent','yacc.py',42),
-  ('outdent -> OUTDENT','outdent',1,'p_outdent','yacc.py',50),
-  ('tag -> TAG_NAME inside_tag','tag',2,'p_tag','yacc.py',59),
-  ('tag -> div_tag','tag',1,'p_tag','yacc.py',60),
-  ('div_tag -> inside_tag','div_tag',1,'p_div_tag','yacc.py',69),
-  ('inside_tag -> attributes_aux text','inside_tag',2,'p_inside_tag','yacc.py',75),
-  ('attributes_aux -> attributes','attributes_aux',1,'p_attributes_aux','yacc.py',83),
-  ('attributes_aux -> attribute_empty','attributes_aux',1,'p_attributes_aux','yacc.py',84),
-  ('tag_empty -> <empty>','tag_empty',0,'p_tag_empty','yacc.py',91),
-  ('attributes -> LPAREN attributes_list RPAREN special_attribute','attributes',4,'p_attributes','yacc.py',97),
-  ('attributes -> special_attribute attributes','attributes',2,'p_attributes','yacc.py',98),
-  ('attributes -> special_attribute attribute_empty','attributes',2,'p_attributes','yacc.py',99),
-  ('attributes -> attribute_empty','attributes',1,'p_attributes','yacc.py',100),
-  ('attributes_list -> attribute COMMA attributes_list','attributes_list',3,'p_attributes_list','yacc.py',111),
-  ('attributes_list -> attribute','attributes_list',1,'p_attributes_list','yacc.py',112),
-  ('attribute -> ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE','attribute',3,'p_attribute','yacc.py',121),
-  ('attribute -> attribute_empty','attribute',1,'p_attribute','yacc.py',122),
-  ('attribute_empty -> <empty>','attribute_empty',0,'p_attribute_empty','yacc.py',131),
-  ('special_attribute -> class_attribute','special_attribute',1,'p_special_attribute','yacc.py',137),
-  ('special_attribute -> id_attribute','special_attribute',1,'p_special_attribute','yacc.py',138),
-  ('class_attribute -> DOT SPECIAL_ATTRIBUTE id_attribute','class_attribute',3,'p_class_attribute','yacc.py',144),
-  ('class_attribute -> class_attribute_empty','class_attribute',1,'p_class_attribute','yacc.py',145),
-  ('id_attribute -> HASHTAG SPECIAL_ATTRIBUTE class_attribute','id_attribute',3,'p_id_attribute','yacc.py',154),
-  ('id_attribute -> id_attribute_empty','id_attribute',1,'p_id_attribute','yacc.py',155),
-  ('class_attribute_empty -> <empty>','class_attribute_empty',0,'p_class_attribute_emtpy','yacc.py',164),
-  ('id_attribute_empty -> <empty>','id_attribute_empty',0,'p_id_attribute_empty','yacc.py',170),
-  ('text -> SPACE TEXT','text',2,'p_text','yacc.py',176),
-  ('text -> text_empty','text',1,'p_text','yacc.py',177),
-  ('text_empty -> <empty>','text_empty',0,'p_text_emtpy','yacc.py',183),
+  ('line -> dent tag line','line',3,'p_line','yacc.py',13),
+  ('line -> tag line','line',2,'p_line','yacc.py',14),
+  ('line -> dent_tag_aux','line',1,'p_line','yacc.py',15),
+  ('dent_tag_aux -> dent tag','dent_tag_aux',2,'p_dent_tag_aux','yacc.py',27),
+  ('line_empty -> <empty>','line_empty',0,'p_line_empty','yacc.py',34),
+  ('dent -> indent','dent',1,'p_dent','yacc.py',40),
+  ('dent -> outdent','dent',1,'p_dent','yacc.py',41),
+  ('dent -> nodent','dent',1,'p_dent','yacc.py',42),
+  ('indent -> INDENT','indent',1,'p_indent','yacc.py',48),
+  ('outdent -> OUTDENT','outdent',1,'p_outdent','yacc.py',56),
+  ('nodent -> NODENT','nodent',1,'p_nodent','yacc.py',65),
+  ('tag -> TAG_NAME inside_tag','tag',2,'p_tag','yacc.py',72),
+  ('tag -> div_tag','tag',1,'p_tag','yacc.py',73),
+  ('div_tag -> inside_tag','div_tag',1,'p_div_tag','yacc.py',82),
+  ('inside_tag -> attributes_aux text','inside_tag',2,'p_inside_tag','yacc.py',88),
+  ('attributes_aux -> attributes','attributes_aux',1,'p_attributes_aux','yacc.py',96),
+  ('attributes_aux -> attribute_empty','attributes_aux',1,'p_attributes_aux','yacc.py',97),
+  ('tag_empty -> <empty>','tag_empty',0,'p_tag_empty','yacc.py',104),
+  ('attributes -> LPAREN attributes_list RPAREN special_attribute','attributes',4,'p_attributes','yacc.py',110),
+  ('attributes -> special_attribute attributes','attributes',2,'p_attributes','yacc.py',111),
+  ('attributes -> special_attribute attribute_empty','attributes',2,'p_attributes','yacc.py',112),
+  ('attributes -> attribute_empty','attributes',1,'p_attributes','yacc.py',113),
+  ('attributes_list -> attribute COMMA attributes_list','attributes_list',3,'p_attributes_list','yacc.py',124),
+  ('attributes_list -> attribute','attributes_list',1,'p_attributes_list','yacc.py',125),
+  ('attribute -> ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE','attribute',3,'p_attribute','yacc.py',134),
+  ('attribute -> attribute_empty','attribute',1,'p_attribute','yacc.py',135),
+  ('attribute_empty -> <empty>','attribute_empty',0,'p_attribute_empty','yacc.py',144),
+  ('special_attribute -> class_attribute','special_attribute',1,'p_special_attribute','yacc.py',150),
+  ('special_attribute -> id_attribute','special_attribute',1,'p_special_attribute','yacc.py',151),
+  ('class_attribute -> DOT SPECIAL_ATTRIBUTE id_attribute','class_attribute',3,'p_class_attribute','yacc.py',157),
+  ('class_attribute -> class_attribute_empty','class_attribute',1,'p_class_attribute','yacc.py',158),
+  ('id_attribute -> HASHTAG SPECIAL_ATTRIBUTE class_attribute','id_attribute',3,'p_id_attribute','yacc.py',167),
+  ('id_attribute -> id_attribute_empty','id_attribute',1,'p_id_attribute','yacc.py',168),
+  ('class_attribute_empty -> <empty>','class_attribute_empty',0,'p_class_attribute_emtpy','yacc.py',177),
+  ('id_attribute_empty -> <empty>','id_attribute_empty',0,'p_id_attribute_empty','yacc.py',183),
+  ('text -> SPACE TEXT','text',2,'p_text','yacc.py',189),
+  ('text -> text_empty','text',1,'p_text','yacc.py',190),
+  ('text_empty -> <empty>','text_empty',0,'p_text_emtpy','yacc.py',196),
 ]

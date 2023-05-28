@@ -38,3 +38,28 @@ class AttributeNode:
 
     def __repr__(self):
         return f'{self.name}={self.value}'
+
+class Stack:
+    def __init__(self, stack=[]):
+        self.stack = stack
+
+    def push(self, node, identation_level):
+        print(self.stack)
+        print(node)
+        if len(self.stack) == 0:
+            self.stack.append((node, identation_level))
+
+        else:
+            while (self.stack[-1][1] > identation_level):
+               child = self.stack.pop()
+               node.add_child(child[0])
+               if len(self.stack) == 0:
+                   break
+            self.stack.append((node, identation_level))
+        print(self.stack, '\n\n')
+
+    def __str__(self):
+        sb = ''
+        for i in range(len(self.stack)-1, -1, -1):
+            sb += f'node: {repr(self.stack[i][0])} dent_level: {self.stack[i][1]}\n'
+        return sb
