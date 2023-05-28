@@ -3,7 +3,8 @@ import ply.lex as lex
 states = (
     ('tag', 'exclusive'),
     ('attribute', 'exclusive'),
-    ('special', 'exclusive')
+    ('special', 'exclusive'),
+    ('multitext', 'exclusive')
 )
 
 tokens = [
@@ -26,6 +27,47 @@ tokens = [
 def t_TAG_NAME(t):
     r'[a-zA-Z][a-zA-Z0-9]*'
     lexer.push_state('tag')
+    return t
+
+# Newline handling
+def t_ANY_newline(t):
+    r'\n[ \t]*'
+    global indent_level
+    t.lexer.lineno += 1
+    i = len(t.value) - 1
+    if (t.value[-1] != '\n') and (i != indent_level):
+        if i > indent_level:
+            t.type = 'INDENT' 
+            t.lexer.begin('INITIAL')
+            t.value = i
+            indent_level = i
+        elif i < indent_level:
+            t.type = 'OUTDENT'
+            t.value = i
+            indent_level = i
+        return t
+    else:
+        pass
+"""
+def t_SPECIAL_DOT(t):
+    r'\.\n'
+    lexer.push_state('multitext')
+    return t
+
+def t_multitext_MULTITEXT(t):
+    r'(\ +)([^\n]+)'
+"""
+
+def t_DOT(t):
+    r'\.'
+    lexer.push_state('tag')
+    lexer.push_state('special')
+    return t
+
+def t_HASHTAG(t):
+    r'\#'
+    lexer.push_state('tag')
+    lexer.push_state('special')
     return t
 
 def t_tag_DOT(t):
@@ -82,24 +124,7 @@ t_ANY_ignore = ''
 
 indent_level = 0
 
-# Newline handling
-def t_ANY_newline(t):
-    r'\n[ \t]*'
-    global indent_level
-    t.lexer.lineno += 1
-    i = len(t.value) - 1
-    if (t.value[-1] != '\n') and (i != indent_level):
-        if i > indent_level:
-            t.type = 'INDENT'
-            t.value = i
-            indent_level = i
-        elif i < indent_level:
-            t.type = 'OUTDENT'
-            t.value = i
-            indent_level = i
-        return t
-    else:
-        pass
+
 
 # Error handling
 def t_ANY_error(t):
@@ -107,3 +132,13 @@ def t_ANY_error(t):
     t.lexer.skip(1)
 
 lexer = lex.lex()
+
+"""
+with open("../test.pug", 'r') as f:
+    lines = ""
+    for line in f.readlines():
+        lines += line
+    lexer.input(lines)
+    for tok in lexer:
+        print(tok)
+        """

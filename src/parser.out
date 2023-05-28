@@ -1,597 +1,913 @@
 Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
-Unused terminals:
-
-    OUTDENT
-
 Grammar
 
-Rule 0     S' -> tag
-Rule 1     tag -> TAG_NAME attributes text INDENT tag
-Rule 2     tag -> TAG_NAME attributes INDENT tag
-Rule 3     tag -> TAG_NAME text INDENT tag
-Rule 4     tag -> TAG_NAME INDENT tag
-Rule 5     tag -> TAG_NAME attributes text
-Rule 6     tag -> TAG_NAME text
-Rule 7     tag -> tag_emtpy
-Rule 8     tag_emtpy -> <empty>
-Rule 9     attributes -> LPAREN attributes_list RPAREN special_attribute
-Rule 10    attributes -> special_attribute attributes
-Rule 11    attributes_list -> attribute COMMA attributes_list
-Rule 12    attributes_list -> attribute
-Rule 13    attribute -> ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE
-Rule 14    attribute -> attribute_empty
-Rule 15    attribute_empty -> <empty>
-Rule 16    special_attribute -> class_attribute
-Rule 17    special_attribute -> id_attribute
-Rule 18    class_attribute -> DOT SPECIAL_ATTRIBUTE id_attribute
-Rule 19    class_attribute -> class_attribute_empty
-Rule 20    id_attribute -> HASHTAG SPECIAL_ATTRIBUTE class_attribute
-Rule 21    id_attribute -> id_attribute_empty
-Rule 22    class_attribute_empty -> <empty>
-Rule 23    id_attribute_empty -> <empty>
-Rule 24    text -> SPACE TEXT
+Rule 0     S' -> line
+Rule 1     line -> tag dent line
+Rule 2     line -> tag line_empty
+Rule 3     line_empty -> <empty>
+Rule 4     dent -> indent
+Rule 5     dent -> outdent
+Rule 6     indent -> INDENT
+Rule 7     outdent -> OUTDENT
+Rule 8     tag -> TAG_NAME inside_tag
+Rule 9     tag -> div_tag
+Rule 10    div_tag -> inside_tag
+Rule 11    inside_tag -> attributes_aux text
+Rule 12    attributes_aux -> attributes
+Rule 13    attributes_aux -> attribute_empty
+Rule 14    tag_empty -> <empty>
+Rule 15    attributes -> LPAREN attributes_list RPAREN special_attribute
+Rule 16    attributes -> special_attribute attributes
+Rule 17    attributes -> special_attribute attribute_empty
+Rule 18    attributes -> attribute_empty
+Rule 19    attributes_list -> attribute COMMA attributes_list
+Rule 20    attributes_list -> attribute
+Rule 21    attribute -> ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE
+Rule 22    attribute -> attribute_empty
+Rule 23    attribute_empty -> <empty>
+Rule 24    special_attribute -> class_attribute
+Rule 25    special_attribute -> id_attribute
+Rule 26    class_attribute -> DOT SPECIAL_ATTRIBUTE id_attribute
+Rule 27    class_attribute -> class_attribute_empty
+Rule 28    id_attribute -> HASHTAG SPECIAL_ATTRIBUTE class_attribute
+Rule 29    id_attribute -> id_attribute_empty
+Rule 30    class_attribute_empty -> <empty>
+Rule 31    id_attribute_empty -> <empty>
+Rule 32    text -> SPACE TEXT
+Rule 33    text -> text_empty
+Rule 34    text_empty -> <empty>
 
 Terminals, with rules where they appear
 
-ATTRIBUTE_NAME       : 13
-ATTRIBUTE_VALUE      : 13
-COMMA                : 11
-DOT                  : 18
-EQUALS               : 13
-HASHTAG              : 20
-INDENT               : 1 2 3 4
-LPAREN               : 9
-OUTDENT              : 
-RPAREN               : 9
-SPACE                : 24
-SPECIAL_ATTRIBUTE    : 18 20
-TAG_NAME             : 1 2 3 4 5 6
-TEXT                 : 24
+ATTRIBUTE_NAME       : 21
+ATTRIBUTE_VALUE      : 21
+COMMA                : 19
+DOT                  : 26
+EQUALS               : 21
+HASHTAG              : 28
+INDENT               : 6
+LPAREN               : 15
+OUTDENT              : 7
+RPAREN               : 15
+SPACE                : 32
+SPECIAL_ATTRIBUTE    : 26 28
+TAG_NAME             : 8
+TEXT                 : 32
 error                : 
 
 Nonterminals, with rules where they appear
 
-attribute            : 11 12
-attribute_empty      : 14
-attributes           : 1 2 5 10
-attributes_list      : 9 11
-class_attribute      : 16 20
-class_attribute_empty : 19
-id_attribute         : 17 18
-id_attribute_empty   : 21
-special_attribute    : 9 10
-tag                  : 1 2 3 4 0
-tag_emtpy            : 7
-text                 : 1 3 5 6
+attribute            : 19 20
+attribute_empty      : 13 17 18 22
+attributes           : 12 16
+attributes_aux       : 11
+attributes_list      : 15 19
+class_attribute      : 24 28
+class_attribute_empty : 27
+dent                 : 1
+div_tag              : 9
+id_attribute         : 25 26
+id_attribute_empty   : 29
+indent               : 4
+inside_tag           : 8 10
+line                 : 1 0
+line_empty           : 2
+outdent              : 5
+special_attribute    : 15 16 17
+tag                  : 1 2
+tag_empty            : 
+text                 : 11
+text_empty           : 33
 
 Parsing method: LALR
 
 state 0
 
-    (0) S' -> . tag
-    (1) tag -> . TAG_NAME attributes text INDENT tag
-    (2) tag -> . TAG_NAME attributes INDENT tag
-    (3) tag -> . TAG_NAME text INDENT tag
-    (4) tag -> . TAG_NAME INDENT tag
-    (5) tag -> . TAG_NAME attributes text
-    (6) tag -> . TAG_NAME text
-    (7) tag -> . tag_emtpy
-    (8) tag_emtpy -> .
+    (0) S' -> . line
+    (1) line -> . tag dent line
+    (2) line -> . tag line_empty
+    (8) tag -> . TAG_NAME inside_tag
+    (9) tag -> . div_tag
+    (10) div_tag -> . inside_tag
+    (11) inside_tag -> . attributes_aux text
+    (12) attributes_aux -> . attributes
+    (13) attributes_aux -> . attribute_empty
+    (15) attributes -> . LPAREN attributes_list RPAREN special_attribute
+    (16) attributes -> . special_attribute attributes
+    (17) attributes -> . special_attribute attribute_empty
+    (18) attributes -> . attribute_empty
+    (23) attribute_empty -> .
+    (24) special_attribute -> . class_attribute
+    (25) special_attribute -> . id_attribute
+    (26) class_attribute -> . DOT SPECIAL_ATTRIBUTE id_attribute
+    (27) class_attribute -> . class_attribute_empty
+    (28) id_attribute -> . HASHTAG SPECIAL_ATTRIBUTE class_attribute
+    (29) id_attribute -> . id_attribute_empty
+    (30) class_attribute_empty -> .
+    (31) id_attribute_empty -> .
 
-    TAG_NAME        shift and go to state 2
-    $end            reduce using rule 8 (tag_emtpy -> .)
+  ! shift/reduce conflict for LPAREN resolved as shift
+  ! shift/reduce conflict for DOT resolved as shift
+  ! shift/reduce conflict for HASHTAG resolved as shift
+  ! reduce/reduce conflict for SPACE resolved using rule 23 (attribute_empty -> .)
+  ! reduce/reduce conflict for INDENT resolved using rule 23 (attribute_empty -> .)
+  ! reduce/reduce conflict for OUTDENT resolved using rule 23 (attribute_empty -> .)
+  ! reduce/reduce conflict for $end resolved using rule 23 (attribute_empty -> .)
+  ! shift/reduce conflict for LPAREN resolved as shift
+  ! shift/reduce conflict for DOT resolved as shift
+  ! shift/reduce conflict for HASHTAG resolved as shift
+  ! reduce/reduce conflict for SPACE resolved using rule 23 (attribute_empty -> .)
+  ! reduce/reduce conflict for INDENT resolved using rule 23 (attribute_empty -> .)
+  ! reduce/reduce conflict for OUTDENT resolved using rule 23 (attribute_empty -> .)
+  ! reduce/reduce conflict for $end resolved using rule 23 (attribute_empty -> .)
+    TAG_NAME        shift and go to state 3
+    LPAREN          shift and go to state 9
+    SPACE           reduce using rule 23 (attribute_empty -> .)
+    INDENT          reduce using rule 23 (attribute_empty -> .)
+    OUTDENT         reduce using rule 23 (attribute_empty -> .)
+    $end            reduce using rule 23 (attribute_empty -> .)
+    DOT             shift and go to state 13
+    HASHTAG         shift and go to state 15
 
-    tag                            shift and go to state 1
-    tag_emtpy                      shift and go to state 3
+  ! LPAREN          [ reduce using rule 30 (class_attribute_empty -> .) ]
+  ! DOT             [ reduce using rule 30 (class_attribute_empty -> .) ]
+  ! HASHTAG         [ reduce using rule 30 (class_attribute_empty -> .) ]
+  ! SPACE           [ reduce using rule 30 (class_attribute_empty -> .) ]
+  ! INDENT          [ reduce using rule 30 (class_attribute_empty -> .) ]
+  ! OUTDENT         [ reduce using rule 30 (class_attribute_empty -> .) ]
+  ! $end            [ reduce using rule 30 (class_attribute_empty -> .) ]
+  ! LPAREN          [ reduce using rule 31 (id_attribute_empty -> .) ]
+  ! DOT             [ reduce using rule 31 (id_attribute_empty -> .) ]
+  ! HASHTAG         [ reduce using rule 31 (id_attribute_empty -> .) ]
+  ! SPACE           [ reduce using rule 31 (id_attribute_empty -> .) ]
+  ! INDENT          [ reduce using rule 31 (id_attribute_empty -> .) ]
+  ! OUTDENT         [ reduce using rule 31 (id_attribute_empty -> .) ]
+  ! $end            [ reduce using rule 31 (id_attribute_empty -> .) ]
+
+    line                           shift and go to state 1
+    tag                            shift and go to state 2
+    inside_tag                     shift and go to state 4
+    div_tag                        shift and go to state 5
+    attributes_aux                 shift and go to state 6
+    attributes                     shift and go to state 7
+    attribute_empty                shift and go to state 8
+    special_attribute              shift and go to state 10
+    class_attribute                shift and go to state 11
+    id_attribute                   shift and go to state 12
+    class_attribute_empty          shift and go to state 14
+    id_attribute_empty             shift and go to state 16
 
 state 1
 
-    (0) S' -> tag .
+    (0) S' -> line .
 
 
 
 state 2
 
-    (1) tag -> TAG_NAME . attributes text INDENT tag
-    (2) tag -> TAG_NAME . attributes INDENT tag
-    (3) tag -> TAG_NAME . text INDENT tag
-    (4) tag -> TAG_NAME . INDENT tag
-    (5) tag -> TAG_NAME . attributes text
-    (6) tag -> TAG_NAME . text
-    (9) attributes -> . LPAREN attributes_list RPAREN special_attribute
-    (10) attributes -> . special_attribute attributes
-    (24) text -> . SPACE TEXT
-    (16) special_attribute -> . class_attribute
-    (17) special_attribute -> . id_attribute
-    (18) class_attribute -> . DOT SPECIAL_ATTRIBUTE id_attribute
-    (19) class_attribute -> . class_attribute_empty
-    (20) id_attribute -> . HASHTAG SPECIAL_ATTRIBUTE class_attribute
-    (21) id_attribute -> . id_attribute_empty
-    (22) class_attribute_empty -> .
-    (23) id_attribute_empty -> .
+    (1) line -> tag . dent line
+    (2) line -> tag . line_empty
+    (4) dent -> . indent
+    (5) dent -> . outdent
+    (3) line_empty -> .
+    (6) indent -> . INDENT
+    (7) outdent -> . OUTDENT
 
-  ! shift/reduce conflict for LPAREN resolved as shift
-  ! shift/reduce conflict for DOT resolved as shift
-  ! shift/reduce conflict for HASHTAG resolved as shift
-  ! shift/reduce conflict for LPAREN resolved as shift
-  ! shift/reduce conflict for DOT resolved as shift
-  ! shift/reduce conflict for HASHTAG resolved as shift
-    INDENT          shift and go to state 6
-    LPAREN          shift and go to state 7
-    SPACE           shift and go to state 9
-    DOT             shift and go to state 12
-    HASHTAG         shift and go to state 14
+    $end            reduce using rule 3 (line_empty -> .)
+    INDENT          shift and go to state 21
+    OUTDENT         shift and go to state 22
 
-  ! LPAREN          [ reduce using rule 22 (class_attribute_empty -> .) ]
-  ! DOT             [ reduce using rule 22 (class_attribute_empty -> .) ]
-  ! HASHTAG         [ reduce using rule 22 (class_attribute_empty -> .) ]
-  ! LPAREN          [ reduce using rule 23 (id_attribute_empty -> .) ]
-  ! DOT             [ reduce using rule 23 (id_attribute_empty -> .) ]
-  ! HASHTAG         [ reduce using rule 23 (id_attribute_empty -> .) ]
-
-    attributes                     shift and go to state 4
-    text                           shift and go to state 5
-    special_attribute              shift and go to state 8
-    class_attribute                shift and go to state 10
-    id_attribute                   shift and go to state 11
-    class_attribute_empty          shift and go to state 13
-    id_attribute_empty             shift and go to state 15
+    dent                           shift and go to state 17
+    line_empty                     shift and go to state 18
+    indent                         shift and go to state 19
+    outdent                        shift and go to state 20
 
 state 3
 
-    (7) tag -> tag_emtpy .
+    (8) tag -> TAG_NAME . inside_tag
+    (11) inside_tag -> . attributes_aux text
+    (12) attributes_aux -> . attributes
+    (13) attributes_aux -> . attribute_empty
+    (15) attributes -> . LPAREN attributes_list RPAREN special_attribute
+    (16) attributes -> . special_attribute attributes
+    (17) attributes -> . special_attribute attribute_empty
+    (18) attributes -> . attribute_empty
+    (23) attribute_empty -> .
+    (24) special_attribute -> . class_attribute
+    (25) special_attribute -> . id_attribute
+    (26) class_attribute -> . DOT SPECIAL_ATTRIBUTE id_attribute
+    (27) class_attribute -> . class_attribute_empty
+    (28) id_attribute -> . HASHTAG SPECIAL_ATTRIBUTE class_attribute
+    (29) id_attribute -> . id_attribute_empty
+    (30) class_attribute_empty -> .
+    (31) id_attribute_empty -> .
 
-    $end            reduce using rule 7 (tag -> tag_emtpy .)
+  ! shift/reduce conflict for LPAREN resolved as shift
+  ! shift/reduce conflict for DOT resolved as shift
+  ! shift/reduce conflict for HASHTAG resolved as shift
+  ! reduce/reduce conflict for SPACE resolved using rule 23 (attribute_empty -> .)
+  ! reduce/reduce conflict for INDENT resolved using rule 23 (attribute_empty -> .)
+  ! reduce/reduce conflict for OUTDENT resolved using rule 23 (attribute_empty -> .)
+  ! reduce/reduce conflict for $end resolved using rule 23 (attribute_empty -> .)
+  ! shift/reduce conflict for LPAREN resolved as shift
+  ! shift/reduce conflict for DOT resolved as shift
+  ! shift/reduce conflict for HASHTAG resolved as shift
+  ! reduce/reduce conflict for SPACE resolved using rule 23 (attribute_empty -> .)
+  ! reduce/reduce conflict for INDENT resolved using rule 23 (attribute_empty -> .)
+  ! reduce/reduce conflict for OUTDENT resolved using rule 23 (attribute_empty -> .)
+  ! reduce/reduce conflict for $end resolved using rule 23 (attribute_empty -> .)
+    LPAREN          shift and go to state 9
+    SPACE           reduce using rule 23 (attribute_empty -> .)
+    INDENT          reduce using rule 23 (attribute_empty -> .)
+    OUTDENT         reduce using rule 23 (attribute_empty -> .)
+    $end            reduce using rule 23 (attribute_empty -> .)
+    DOT             shift and go to state 13
+    HASHTAG         shift and go to state 15
 
+  ! LPAREN          [ reduce using rule 30 (class_attribute_empty -> .) ]
+  ! DOT             [ reduce using rule 30 (class_attribute_empty -> .) ]
+  ! HASHTAG         [ reduce using rule 30 (class_attribute_empty -> .) ]
+  ! SPACE           [ reduce using rule 30 (class_attribute_empty -> .) ]
+  ! INDENT          [ reduce using rule 30 (class_attribute_empty -> .) ]
+  ! OUTDENT         [ reduce using rule 30 (class_attribute_empty -> .) ]
+  ! $end            [ reduce using rule 30 (class_attribute_empty -> .) ]
+  ! LPAREN          [ reduce using rule 31 (id_attribute_empty -> .) ]
+  ! DOT             [ reduce using rule 31 (id_attribute_empty -> .) ]
+  ! HASHTAG         [ reduce using rule 31 (id_attribute_empty -> .) ]
+  ! SPACE           [ reduce using rule 31 (id_attribute_empty -> .) ]
+  ! INDENT          [ reduce using rule 31 (id_attribute_empty -> .) ]
+  ! OUTDENT         [ reduce using rule 31 (id_attribute_empty -> .) ]
+  ! $end            [ reduce using rule 31 (id_attribute_empty -> .) ]
+
+    inside_tag                     shift and go to state 23
+    attributes_aux                 shift and go to state 6
+    attributes                     shift and go to state 7
+    attribute_empty                shift and go to state 8
+    special_attribute              shift and go to state 10
+    class_attribute                shift and go to state 11
+    id_attribute                   shift and go to state 12
+    class_attribute_empty          shift and go to state 14
+    id_attribute_empty             shift and go to state 16
 
 state 4
 
-    (1) tag -> TAG_NAME attributes . text INDENT tag
-    (2) tag -> TAG_NAME attributes . INDENT tag
-    (5) tag -> TAG_NAME attributes . text
-    (24) text -> . SPACE TEXT
+    (10) div_tag -> inside_tag .
 
-    INDENT          shift and go to state 17
-    SPACE           shift and go to state 9
+    INDENT          reduce using rule 10 (div_tag -> inside_tag .)
+    OUTDENT         reduce using rule 10 (div_tag -> inside_tag .)
+    $end            reduce using rule 10 (div_tag -> inside_tag .)
 
-    text                           shift and go to state 16
 
 state 5
 
-    (3) tag -> TAG_NAME text . INDENT tag
-    (6) tag -> TAG_NAME text .
+    (9) tag -> div_tag .
 
-    INDENT          shift and go to state 18
-    $end            reduce using rule 6 (tag -> TAG_NAME text .)
+    INDENT          reduce using rule 9 (tag -> div_tag .)
+    OUTDENT         reduce using rule 9 (tag -> div_tag .)
+    $end            reduce using rule 9 (tag -> div_tag .)
 
 
 state 6
 
-    (4) tag -> TAG_NAME INDENT . tag
-    (1) tag -> . TAG_NAME attributes text INDENT tag
-    (2) tag -> . TAG_NAME attributes INDENT tag
-    (3) tag -> . TAG_NAME text INDENT tag
-    (4) tag -> . TAG_NAME INDENT tag
-    (5) tag -> . TAG_NAME attributes text
-    (6) tag -> . TAG_NAME text
-    (7) tag -> . tag_emtpy
-    (8) tag_emtpy -> .
+    (11) inside_tag -> attributes_aux . text
+    (32) text -> . SPACE TEXT
+    (33) text -> . text_empty
+    (34) text_empty -> .
 
-    TAG_NAME        shift and go to state 2
-    $end            reduce using rule 8 (tag_emtpy -> .)
+    SPACE           shift and go to state 25
+    INDENT          reduce using rule 34 (text_empty -> .)
+    OUTDENT         reduce using rule 34 (text_empty -> .)
+    $end            reduce using rule 34 (text_empty -> .)
 
-    tag                            shift and go to state 19
-    tag_emtpy                      shift and go to state 3
+    text                           shift and go to state 24
+    text_empty                     shift and go to state 26
 
 state 7
 
-    (9) attributes -> LPAREN . attributes_list RPAREN special_attribute
-    (11) attributes_list -> . attribute COMMA attributes_list
-    (12) attributes_list -> . attribute
-    (13) attribute -> . ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE
-    (14) attribute -> . attribute_empty
-    (15) attribute_empty -> .
+    (12) attributes_aux -> attributes .
 
-    ATTRIBUTE_NAME  shift and go to state 22
-    COMMA           reduce using rule 15 (attribute_empty -> .)
-    RPAREN          reduce using rule 15 (attribute_empty -> .)
+    SPACE           reduce using rule 12 (attributes_aux -> attributes .)
+    INDENT          reduce using rule 12 (attributes_aux -> attributes .)
+    OUTDENT         reduce using rule 12 (attributes_aux -> attributes .)
+    $end            reduce using rule 12 (attributes_aux -> attributes .)
 
-    attributes_list                shift and go to state 20
-    attribute                      shift and go to state 21
-    attribute_empty                shift and go to state 23
 
 state 8
 
-    (10) attributes -> special_attribute . attributes
-    (9) attributes -> . LPAREN attributes_list RPAREN special_attribute
-    (10) attributes -> . special_attribute attributes
-    (16) special_attribute -> . class_attribute
-    (17) special_attribute -> . id_attribute
-    (18) class_attribute -> . DOT SPECIAL_ATTRIBUTE id_attribute
-    (19) class_attribute -> . class_attribute_empty
-    (20) id_attribute -> . HASHTAG SPECIAL_ATTRIBUTE class_attribute
-    (21) id_attribute -> . id_attribute_empty
-    (22) class_attribute_empty -> .
-    (23) id_attribute_empty -> .
+    (13) attributes_aux -> attribute_empty .
+    (18) attributes -> attribute_empty .
 
-  ! shift/reduce conflict for LPAREN resolved as shift
-  ! shift/reduce conflict for DOT resolved as shift
-  ! shift/reduce conflict for HASHTAG resolved as shift
-  ! shift/reduce conflict for LPAREN resolved as shift
-  ! shift/reduce conflict for DOT resolved as shift
-  ! shift/reduce conflict for HASHTAG resolved as shift
-    LPAREN          shift and go to state 7
-    DOT             shift and go to state 12
-    HASHTAG         shift and go to state 14
+  ! reduce/reduce conflict for SPACE resolved using rule 13 (attributes_aux -> attribute_empty .)
+  ! reduce/reduce conflict for INDENT resolved using rule 13 (attributes_aux -> attribute_empty .)
+  ! reduce/reduce conflict for OUTDENT resolved using rule 13 (attributes_aux -> attribute_empty .)
+  ! reduce/reduce conflict for $end resolved using rule 13 (attributes_aux -> attribute_empty .)
+    SPACE           reduce using rule 13 (attributes_aux -> attribute_empty .)
+    INDENT          reduce using rule 13 (attributes_aux -> attribute_empty .)
+    OUTDENT         reduce using rule 13 (attributes_aux -> attribute_empty .)
+    $end            reduce using rule 13 (attributes_aux -> attribute_empty .)
 
-  ! LPAREN          [ reduce using rule 22 (class_attribute_empty -> .) ]
-  ! DOT             [ reduce using rule 22 (class_attribute_empty -> .) ]
-  ! HASHTAG         [ reduce using rule 22 (class_attribute_empty -> .) ]
-  ! LPAREN          [ reduce using rule 23 (id_attribute_empty -> .) ]
-  ! DOT             [ reduce using rule 23 (id_attribute_empty -> .) ]
-  ! HASHTAG         [ reduce using rule 23 (id_attribute_empty -> .) ]
+  ! SPACE           [ reduce using rule 18 (attributes -> attribute_empty .) ]
+  ! INDENT          [ reduce using rule 18 (attributes -> attribute_empty .) ]
+  ! OUTDENT         [ reduce using rule 18 (attributes -> attribute_empty .) ]
+  ! $end            [ reduce using rule 18 (attributes -> attribute_empty .) ]
 
-    special_attribute              shift and go to state 8
-    attributes                     shift and go to state 24
-    class_attribute                shift and go to state 10
-    id_attribute                   shift and go to state 11
-    class_attribute_empty          shift and go to state 13
-    id_attribute_empty             shift and go to state 15
 
 state 9
 
-    (24) text -> SPACE . TEXT
+    (15) attributes -> LPAREN . attributes_list RPAREN special_attribute
+    (19) attributes_list -> . attribute COMMA attributes_list
+    (20) attributes_list -> . attribute
+    (21) attribute -> . ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE
+    (22) attribute -> . attribute_empty
+    (23) attribute_empty -> .
 
-    TEXT            shift and go to state 25
+    ATTRIBUTE_NAME  shift and go to state 29
+    COMMA           reduce using rule 23 (attribute_empty -> .)
+    RPAREN          reduce using rule 23 (attribute_empty -> .)
 
+    attributes_list                shift and go to state 27
+    attribute                      shift and go to state 28
+    attribute_empty                shift and go to state 30
 
 state 10
 
-    (16) special_attribute -> class_attribute .
+    (16) attributes -> special_attribute . attributes
+    (17) attributes -> special_attribute . attribute_empty
+    (15) attributes -> . LPAREN attributes_list RPAREN special_attribute
+    (16) attributes -> . special_attribute attributes
+    (17) attributes -> . special_attribute attribute_empty
+    (18) attributes -> . attribute_empty
+    (23) attribute_empty -> .
+    (24) special_attribute -> . class_attribute
+    (25) special_attribute -> . id_attribute
+    (26) class_attribute -> . DOT SPECIAL_ATTRIBUTE id_attribute
+    (27) class_attribute -> . class_attribute_empty
+    (28) id_attribute -> . HASHTAG SPECIAL_ATTRIBUTE class_attribute
+    (29) id_attribute -> . id_attribute_empty
+    (30) class_attribute_empty -> .
+    (31) id_attribute_empty -> .
 
-    LPAREN          reduce using rule 16 (special_attribute -> class_attribute .)
-    DOT             reduce using rule 16 (special_attribute -> class_attribute .)
-    HASHTAG         reduce using rule 16 (special_attribute -> class_attribute .)
-    INDENT          reduce using rule 16 (special_attribute -> class_attribute .)
-    SPACE           reduce using rule 16 (special_attribute -> class_attribute .)
+  ! shift/reduce conflict for LPAREN resolved as shift
+  ! shift/reduce conflict for DOT resolved as shift
+  ! shift/reduce conflict for HASHTAG resolved as shift
+  ! reduce/reduce conflict for SPACE resolved using rule 23 (attribute_empty -> .)
+  ! reduce/reduce conflict for INDENT resolved using rule 23 (attribute_empty -> .)
+  ! reduce/reduce conflict for OUTDENT resolved using rule 23 (attribute_empty -> .)
+  ! reduce/reduce conflict for $end resolved using rule 23 (attribute_empty -> .)
+  ! shift/reduce conflict for LPAREN resolved as shift
+  ! shift/reduce conflict for DOT resolved as shift
+  ! shift/reduce conflict for HASHTAG resolved as shift
+  ! reduce/reduce conflict for SPACE resolved using rule 23 (attribute_empty -> .)
+  ! reduce/reduce conflict for INDENT resolved using rule 23 (attribute_empty -> .)
+  ! reduce/reduce conflict for OUTDENT resolved using rule 23 (attribute_empty -> .)
+  ! reduce/reduce conflict for $end resolved using rule 23 (attribute_empty -> .)
+    LPAREN          shift and go to state 9
+    SPACE           reduce using rule 23 (attribute_empty -> .)
+    INDENT          reduce using rule 23 (attribute_empty -> .)
+    OUTDENT         reduce using rule 23 (attribute_empty -> .)
+    $end            reduce using rule 23 (attribute_empty -> .)
+    DOT             shift and go to state 13
+    HASHTAG         shift and go to state 15
 
+  ! LPAREN          [ reduce using rule 30 (class_attribute_empty -> .) ]
+  ! DOT             [ reduce using rule 30 (class_attribute_empty -> .) ]
+  ! HASHTAG         [ reduce using rule 30 (class_attribute_empty -> .) ]
+  ! SPACE           [ reduce using rule 30 (class_attribute_empty -> .) ]
+  ! INDENT          [ reduce using rule 30 (class_attribute_empty -> .) ]
+  ! OUTDENT         [ reduce using rule 30 (class_attribute_empty -> .) ]
+  ! $end            [ reduce using rule 30 (class_attribute_empty -> .) ]
+  ! LPAREN          [ reduce using rule 31 (id_attribute_empty -> .) ]
+  ! DOT             [ reduce using rule 31 (id_attribute_empty -> .) ]
+  ! HASHTAG         [ reduce using rule 31 (id_attribute_empty -> .) ]
+  ! SPACE           [ reduce using rule 31 (id_attribute_empty -> .) ]
+  ! INDENT          [ reduce using rule 31 (id_attribute_empty -> .) ]
+  ! OUTDENT         [ reduce using rule 31 (id_attribute_empty -> .) ]
+  ! $end            [ reduce using rule 31 (id_attribute_empty -> .) ]
+
+    special_attribute              shift and go to state 10
+    attributes                     shift and go to state 31
+    attribute_empty                shift and go to state 32
+    class_attribute                shift and go to state 11
+    id_attribute                   shift and go to state 12
+    class_attribute_empty          shift and go to state 14
+    id_attribute_empty             shift and go to state 16
 
 state 11
 
-    (17) special_attribute -> id_attribute .
+    (24) special_attribute -> class_attribute .
 
-    LPAREN          reduce using rule 17 (special_attribute -> id_attribute .)
-    DOT             reduce using rule 17 (special_attribute -> id_attribute .)
-    HASHTAG         reduce using rule 17 (special_attribute -> id_attribute .)
-    INDENT          reduce using rule 17 (special_attribute -> id_attribute .)
-    SPACE           reduce using rule 17 (special_attribute -> id_attribute .)
+    LPAREN          reduce using rule 24 (special_attribute -> class_attribute .)
+    DOT             reduce using rule 24 (special_attribute -> class_attribute .)
+    HASHTAG         reduce using rule 24 (special_attribute -> class_attribute .)
+    SPACE           reduce using rule 24 (special_attribute -> class_attribute .)
+    INDENT          reduce using rule 24 (special_attribute -> class_attribute .)
+    OUTDENT         reduce using rule 24 (special_attribute -> class_attribute .)
+    $end            reduce using rule 24 (special_attribute -> class_attribute .)
 
 
 state 12
 
-    (18) class_attribute -> DOT . SPECIAL_ATTRIBUTE id_attribute
+    (25) special_attribute -> id_attribute .
 
-    SPECIAL_ATTRIBUTE shift and go to state 26
+    LPAREN          reduce using rule 25 (special_attribute -> id_attribute .)
+    DOT             reduce using rule 25 (special_attribute -> id_attribute .)
+    HASHTAG         reduce using rule 25 (special_attribute -> id_attribute .)
+    SPACE           reduce using rule 25 (special_attribute -> id_attribute .)
+    INDENT          reduce using rule 25 (special_attribute -> id_attribute .)
+    OUTDENT         reduce using rule 25 (special_attribute -> id_attribute .)
+    $end            reduce using rule 25 (special_attribute -> id_attribute .)
 
 
 state 13
 
-    (19) class_attribute -> class_attribute_empty .
+    (26) class_attribute -> DOT . SPECIAL_ATTRIBUTE id_attribute
 
-    LPAREN          reduce using rule 19 (class_attribute -> class_attribute_empty .)
-    DOT             reduce using rule 19 (class_attribute -> class_attribute_empty .)
-    HASHTAG         reduce using rule 19 (class_attribute -> class_attribute_empty .)
-    INDENT          reduce using rule 19 (class_attribute -> class_attribute_empty .)
-    SPACE           reduce using rule 19 (class_attribute -> class_attribute_empty .)
+    SPECIAL_ATTRIBUTE shift and go to state 33
 
 
 state 14
 
-    (20) id_attribute -> HASHTAG . SPECIAL_ATTRIBUTE class_attribute
+    (27) class_attribute -> class_attribute_empty .
 
-    SPECIAL_ATTRIBUTE shift and go to state 27
+    LPAREN          reduce using rule 27 (class_attribute -> class_attribute_empty .)
+    DOT             reduce using rule 27 (class_attribute -> class_attribute_empty .)
+    HASHTAG         reduce using rule 27 (class_attribute -> class_attribute_empty .)
+    SPACE           reduce using rule 27 (class_attribute -> class_attribute_empty .)
+    INDENT          reduce using rule 27 (class_attribute -> class_attribute_empty .)
+    OUTDENT         reduce using rule 27 (class_attribute -> class_attribute_empty .)
+    $end            reduce using rule 27 (class_attribute -> class_attribute_empty .)
 
 
 state 15
 
-    (21) id_attribute -> id_attribute_empty .
+    (28) id_attribute -> HASHTAG . SPECIAL_ATTRIBUTE class_attribute
 
-    LPAREN          reduce using rule 21 (id_attribute -> id_attribute_empty .)
-    DOT             reduce using rule 21 (id_attribute -> id_attribute_empty .)
-    HASHTAG         reduce using rule 21 (id_attribute -> id_attribute_empty .)
-    INDENT          reduce using rule 21 (id_attribute -> id_attribute_empty .)
-    SPACE           reduce using rule 21 (id_attribute -> id_attribute_empty .)
+    SPECIAL_ATTRIBUTE shift and go to state 34
 
 
 state 16
 
-    (1) tag -> TAG_NAME attributes text . INDENT tag
-    (5) tag -> TAG_NAME attributes text .
+    (29) id_attribute -> id_attribute_empty .
 
-    INDENT          shift and go to state 28
-    $end            reduce using rule 5 (tag -> TAG_NAME attributes text .)
+    LPAREN          reduce using rule 29 (id_attribute -> id_attribute_empty .)
+    DOT             reduce using rule 29 (id_attribute -> id_attribute_empty .)
+    HASHTAG         reduce using rule 29 (id_attribute -> id_attribute_empty .)
+    SPACE           reduce using rule 29 (id_attribute -> id_attribute_empty .)
+    INDENT          reduce using rule 29 (id_attribute -> id_attribute_empty .)
+    OUTDENT         reduce using rule 29 (id_attribute -> id_attribute_empty .)
+    $end            reduce using rule 29 (id_attribute -> id_attribute_empty .)
 
 
 state 17
 
-    (2) tag -> TAG_NAME attributes INDENT . tag
-    (1) tag -> . TAG_NAME attributes text INDENT tag
-    (2) tag -> . TAG_NAME attributes INDENT tag
-    (3) tag -> . TAG_NAME text INDENT tag
-    (4) tag -> . TAG_NAME INDENT tag
-    (5) tag -> . TAG_NAME attributes text
-    (6) tag -> . TAG_NAME text
-    (7) tag -> . tag_emtpy
-    (8) tag_emtpy -> .
+    (1) line -> tag dent . line
+    (1) line -> . tag dent line
+    (2) line -> . tag line_empty
+    (8) tag -> . TAG_NAME inside_tag
+    (9) tag -> . div_tag
+    (10) div_tag -> . inside_tag
+    (11) inside_tag -> . attributes_aux text
+    (12) attributes_aux -> . attributes
+    (13) attributes_aux -> . attribute_empty
+    (15) attributes -> . LPAREN attributes_list RPAREN special_attribute
+    (16) attributes -> . special_attribute attributes
+    (17) attributes -> . special_attribute attribute_empty
+    (18) attributes -> . attribute_empty
+    (23) attribute_empty -> .
+    (24) special_attribute -> . class_attribute
+    (25) special_attribute -> . id_attribute
+    (26) class_attribute -> . DOT SPECIAL_ATTRIBUTE id_attribute
+    (27) class_attribute -> . class_attribute_empty
+    (28) id_attribute -> . HASHTAG SPECIAL_ATTRIBUTE class_attribute
+    (29) id_attribute -> . id_attribute_empty
+    (30) class_attribute_empty -> .
+    (31) id_attribute_empty -> .
 
-    TAG_NAME        shift and go to state 2
-    $end            reduce using rule 8 (tag_emtpy -> .)
+  ! shift/reduce conflict for LPAREN resolved as shift
+  ! shift/reduce conflict for DOT resolved as shift
+  ! shift/reduce conflict for HASHTAG resolved as shift
+  ! reduce/reduce conflict for SPACE resolved using rule 23 (attribute_empty -> .)
+  ! reduce/reduce conflict for INDENT resolved using rule 23 (attribute_empty -> .)
+  ! reduce/reduce conflict for OUTDENT resolved using rule 23 (attribute_empty -> .)
+  ! reduce/reduce conflict for $end resolved using rule 23 (attribute_empty -> .)
+  ! shift/reduce conflict for LPAREN resolved as shift
+  ! shift/reduce conflict for DOT resolved as shift
+  ! shift/reduce conflict for HASHTAG resolved as shift
+  ! reduce/reduce conflict for SPACE resolved using rule 23 (attribute_empty -> .)
+  ! reduce/reduce conflict for INDENT resolved using rule 23 (attribute_empty -> .)
+  ! reduce/reduce conflict for OUTDENT resolved using rule 23 (attribute_empty -> .)
+  ! reduce/reduce conflict for $end resolved using rule 23 (attribute_empty -> .)
+    TAG_NAME        shift and go to state 3
+    LPAREN          shift and go to state 9
+    SPACE           reduce using rule 23 (attribute_empty -> .)
+    INDENT          reduce using rule 23 (attribute_empty -> .)
+    OUTDENT         reduce using rule 23 (attribute_empty -> .)
+    $end            reduce using rule 23 (attribute_empty -> .)
+    DOT             shift and go to state 13
+    HASHTAG         shift and go to state 15
 
-    tag                            shift and go to state 29
-    tag_emtpy                      shift and go to state 3
+  ! LPAREN          [ reduce using rule 30 (class_attribute_empty -> .) ]
+  ! DOT             [ reduce using rule 30 (class_attribute_empty -> .) ]
+  ! HASHTAG         [ reduce using rule 30 (class_attribute_empty -> .) ]
+  ! SPACE           [ reduce using rule 30 (class_attribute_empty -> .) ]
+  ! INDENT          [ reduce using rule 30 (class_attribute_empty -> .) ]
+  ! OUTDENT         [ reduce using rule 30 (class_attribute_empty -> .) ]
+  ! $end            [ reduce using rule 30 (class_attribute_empty -> .) ]
+  ! LPAREN          [ reduce using rule 31 (id_attribute_empty -> .) ]
+  ! DOT             [ reduce using rule 31 (id_attribute_empty -> .) ]
+  ! HASHTAG         [ reduce using rule 31 (id_attribute_empty -> .) ]
+  ! SPACE           [ reduce using rule 31 (id_attribute_empty -> .) ]
+  ! INDENT          [ reduce using rule 31 (id_attribute_empty -> .) ]
+  ! OUTDENT         [ reduce using rule 31 (id_attribute_empty -> .) ]
+  ! $end            [ reduce using rule 31 (id_attribute_empty -> .) ]
+
+    tag                            shift and go to state 2
+    line                           shift and go to state 35
+    inside_tag                     shift and go to state 4
+    div_tag                        shift and go to state 5
+    attributes_aux                 shift and go to state 6
+    attributes                     shift and go to state 7
+    attribute_empty                shift and go to state 8
+    special_attribute              shift and go to state 10
+    class_attribute                shift and go to state 11
+    id_attribute                   shift and go to state 12
+    class_attribute_empty          shift and go to state 14
+    id_attribute_empty             shift and go to state 16
 
 state 18
 
-    (3) tag -> TAG_NAME text INDENT . tag
-    (1) tag -> . TAG_NAME attributes text INDENT tag
-    (2) tag -> . TAG_NAME attributes INDENT tag
-    (3) tag -> . TAG_NAME text INDENT tag
-    (4) tag -> . TAG_NAME INDENT tag
-    (5) tag -> . TAG_NAME attributes text
-    (6) tag -> . TAG_NAME text
-    (7) tag -> . tag_emtpy
-    (8) tag_emtpy -> .
+    (2) line -> tag line_empty .
 
-    TAG_NAME        shift and go to state 2
-    $end            reduce using rule 8 (tag_emtpy -> .)
+    $end            reduce using rule 2 (line -> tag line_empty .)
 
-    tag                            shift and go to state 30
-    tag_emtpy                      shift and go to state 3
 
 state 19
 
-    (4) tag -> TAG_NAME INDENT tag .
+    (4) dent -> indent .
 
-    $end            reduce using rule 4 (tag -> TAG_NAME INDENT tag .)
+    TAG_NAME        reduce using rule 4 (dent -> indent .)
+    LPAREN          reduce using rule 4 (dent -> indent .)
+    DOT             reduce using rule 4 (dent -> indent .)
+    HASHTAG         reduce using rule 4 (dent -> indent .)
+    INDENT          reduce using rule 4 (dent -> indent .)
+    OUTDENT         reduce using rule 4 (dent -> indent .)
+    SPACE           reduce using rule 4 (dent -> indent .)
+    $end            reduce using rule 4 (dent -> indent .)
 
 
 state 20
 
-    (9) attributes -> LPAREN attributes_list . RPAREN special_attribute
+    (5) dent -> outdent .
 
-    RPAREN          shift and go to state 31
+    TAG_NAME        reduce using rule 5 (dent -> outdent .)
+    LPAREN          reduce using rule 5 (dent -> outdent .)
+    DOT             reduce using rule 5 (dent -> outdent .)
+    HASHTAG         reduce using rule 5 (dent -> outdent .)
+    INDENT          reduce using rule 5 (dent -> outdent .)
+    OUTDENT         reduce using rule 5 (dent -> outdent .)
+    SPACE           reduce using rule 5 (dent -> outdent .)
+    $end            reduce using rule 5 (dent -> outdent .)
 
 
 state 21
 
-    (11) attributes_list -> attribute . COMMA attributes_list
-    (12) attributes_list -> attribute .
+    (6) indent -> INDENT .
 
-    COMMA           shift and go to state 32
-    RPAREN          reduce using rule 12 (attributes_list -> attribute .)
+    TAG_NAME        reduce using rule 6 (indent -> INDENT .)
+    LPAREN          reduce using rule 6 (indent -> INDENT .)
+    DOT             reduce using rule 6 (indent -> INDENT .)
+    HASHTAG         reduce using rule 6 (indent -> INDENT .)
+    INDENT          reduce using rule 6 (indent -> INDENT .)
+    OUTDENT         reduce using rule 6 (indent -> INDENT .)
+    SPACE           reduce using rule 6 (indent -> INDENT .)
+    $end            reduce using rule 6 (indent -> INDENT .)
 
 
 state 22
 
-    (13) attribute -> ATTRIBUTE_NAME . EQUALS ATTRIBUTE_VALUE
+    (7) outdent -> OUTDENT .
 
-    EQUALS          shift and go to state 33
+    TAG_NAME        reduce using rule 7 (outdent -> OUTDENT .)
+    LPAREN          reduce using rule 7 (outdent -> OUTDENT .)
+    DOT             reduce using rule 7 (outdent -> OUTDENT .)
+    HASHTAG         reduce using rule 7 (outdent -> OUTDENT .)
+    INDENT          reduce using rule 7 (outdent -> OUTDENT .)
+    OUTDENT         reduce using rule 7 (outdent -> OUTDENT .)
+    SPACE           reduce using rule 7 (outdent -> OUTDENT .)
+    $end            reduce using rule 7 (outdent -> OUTDENT .)
 
 
 state 23
 
-    (14) attribute -> attribute_empty .
+    (8) tag -> TAG_NAME inside_tag .
 
-    COMMA           reduce using rule 14 (attribute -> attribute_empty .)
-    RPAREN          reduce using rule 14 (attribute -> attribute_empty .)
+    INDENT          reduce using rule 8 (tag -> TAG_NAME inside_tag .)
+    OUTDENT         reduce using rule 8 (tag -> TAG_NAME inside_tag .)
+    $end            reduce using rule 8 (tag -> TAG_NAME inside_tag .)
 
 
 state 24
 
-    (10) attributes -> special_attribute attributes .
+    (11) inside_tag -> attributes_aux text .
 
-    INDENT          reduce using rule 10 (attributes -> special_attribute attributes .)
-    SPACE           reduce using rule 10 (attributes -> special_attribute attributes .)
+    INDENT          reduce using rule 11 (inside_tag -> attributes_aux text .)
+    OUTDENT         reduce using rule 11 (inside_tag -> attributes_aux text .)
+    $end            reduce using rule 11 (inside_tag -> attributes_aux text .)
 
 
 state 25
 
-    (24) text -> SPACE TEXT .
+    (32) text -> SPACE . TEXT
 
-    INDENT          reduce using rule 24 (text -> SPACE TEXT .)
-    $end            reduce using rule 24 (text -> SPACE TEXT .)
+    TEXT            shift and go to state 36
 
 
 state 26
 
-    (18) class_attribute -> DOT SPECIAL_ATTRIBUTE . id_attribute
-    (20) id_attribute -> . HASHTAG SPECIAL_ATTRIBUTE class_attribute
-    (21) id_attribute -> . id_attribute_empty
-    (23) id_attribute_empty -> .
+    (33) text -> text_empty .
 
-  ! shift/reduce conflict for HASHTAG resolved as shift
-    HASHTAG         shift and go to state 14
-    LPAREN          reduce using rule 23 (id_attribute_empty -> .)
-    DOT             reduce using rule 23 (id_attribute_empty -> .)
-    INDENT          reduce using rule 23 (id_attribute_empty -> .)
-    SPACE           reduce using rule 23 (id_attribute_empty -> .)
+    INDENT          reduce using rule 33 (text -> text_empty .)
+    OUTDENT         reduce using rule 33 (text -> text_empty .)
+    $end            reduce using rule 33 (text -> text_empty .)
 
-  ! HASHTAG         [ reduce using rule 23 (id_attribute_empty -> .) ]
-
-    id_attribute                   shift and go to state 34
-    id_attribute_empty             shift and go to state 15
 
 state 27
 
-    (20) id_attribute -> HASHTAG SPECIAL_ATTRIBUTE . class_attribute
-    (18) class_attribute -> . DOT SPECIAL_ATTRIBUTE id_attribute
-    (19) class_attribute -> . class_attribute_empty
-    (22) class_attribute_empty -> .
+    (15) attributes -> LPAREN attributes_list . RPAREN special_attribute
 
-  ! shift/reduce conflict for DOT resolved as shift
-    DOT             shift and go to state 12
-    LPAREN          reduce using rule 22 (class_attribute_empty -> .)
-    HASHTAG         reduce using rule 22 (class_attribute_empty -> .)
-    INDENT          reduce using rule 22 (class_attribute_empty -> .)
-    SPACE           reduce using rule 22 (class_attribute_empty -> .)
+    RPAREN          shift and go to state 37
 
-  ! DOT             [ reduce using rule 22 (class_attribute_empty -> .) ]
-
-    class_attribute                shift and go to state 35
-    class_attribute_empty          shift and go to state 13
 
 state 28
 
-    (1) tag -> TAG_NAME attributes text INDENT . tag
-    (1) tag -> . TAG_NAME attributes text INDENT tag
-    (2) tag -> . TAG_NAME attributes INDENT tag
-    (3) tag -> . TAG_NAME text INDENT tag
-    (4) tag -> . TAG_NAME INDENT tag
-    (5) tag -> . TAG_NAME attributes text
-    (6) tag -> . TAG_NAME text
-    (7) tag -> . tag_emtpy
-    (8) tag_emtpy -> .
+    (19) attributes_list -> attribute . COMMA attributes_list
+    (20) attributes_list -> attribute .
 
-    TAG_NAME        shift and go to state 2
-    $end            reduce using rule 8 (tag_emtpy -> .)
+    COMMA           shift and go to state 38
+    RPAREN          reduce using rule 20 (attributes_list -> attribute .)
 
-    tag                            shift and go to state 36
-    tag_emtpy                      shift and go to state 3
 
 state 29
 
-    (2) tag -> TAG_NAME attributes INDENT tag .
+    (21) attribute -> ATTRIBUTE_NAME . EQUALS ATTRIBUTE_VALUE
 
-    $end            reduce using rule 2 (tag -> TAG_NAME attributes INDENT tag .)
+    EQUALS          shift and go to state 39
 
 
 state 30
 
-    (3) tag -> TAG_NAME text INDENT tag .
+    (22) attribute -> attribute_empty .
 
-    $end            reduce using rule 3 (tag -> TAG_NAME text INDENT tag .)
+    COMMA           reduce using rule 22 (attribute -> attribute_empty .)
+    RPAREN          reduce using rule 22 (attribute -> attribute_empty .)
 
 
 state 31
 
-    (9) attributes -> LPAREN attributes_list RPAREN . special_attribute
-    (16) special_attribute -> . class_attribute
-    (17) special_attribute -> . id_attribute
-    (18) class_attribute -> . DOT SPECIAL_ATTRIBUTE id_attribute
-    (19) class_attribute -> . class_attribute_empty
-    (20) id_attribute -> . HASHTAG SPECIAL_ATTRIBUTE class_attribute
-    (21) id_attribute -> . id_attribute_empty
-    (22) class_attribute_empty -> .
-    (23) id_attribute_empty -> .
+    (16) attributes -> special_attribute attributes .
 
-  ! reduce/reduce conflict for INDENT resolved using rule 22 (class_attribute_empty -> .)
-  ! reduce/reduce conflict for SPACE resolved using rule 22 (class_attribute_empty -> .)
-    DOT             shift and go to state 12
-    HASHTAG         shift and go to state 14
-    INDENT          reduce using rule 22 (class_attribute_empty -> .)
-    SPACE           reduce using rule 22 (class_attribute_empty -> .)
+    SPACE           reduce using rule 16 (attributes -> special_attribute attributes .)
+    INDENT          reduce using rule 16 (attributes -> special_attribute attributes .)
+    OUTDENT         reduce using rule 16 (attributes -> special_attribute attributes .)
+    $end            reduce using rule 16 (attributes -> special_attribute attributes .)
 
-  ! INDENT          [ reduce using rule 23 (id_attribute_empty -> .) ]
-  ! SPACE           [ reduce using rule 23 (id_attribute_empty -> .) ]
-
-    special_attribute              shift and go to state 37
-    class_attribute                shift and go to state 10
-    id_attribute                   shift and go to state 11
-    class_attribute_empty          shift and go to state 13
-    id_attribute_empty             shift and go to state 15
 
 state 32
 
-    (11) attributes_list -> attribute COMMA . attributes_list
-    (11) attributes_list -> . attribute COMMA attributes_list
-    (12) attributes_list -> . attribute
-    (13) attribute -> . ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE
-    (14) attribute -> . attribute_empty
-    (15) attribute_empty -> .
+    (17) attributes -> special_attribute attribute_empty .
+    (18) attributes -> attribute_empty .
 
-    ATTRIBUTE_NAME  shift and go to state 22
-    COMMA           reduce using rule 15 (attribute_empty -> .)
-    RPAREN          reduce using rule 15 (attribute_empty -> .)
+  ! reduce/reduce conflict for SPACE resolved using rule 17 (attributes -> special_attribute attribute_empty .)
+  ! reduce/reduce conflict for INDENT resolved using rule 17 (attributes -> special_attribute attribute_empty .)
+  ! reduce/reduce conflict for OUTDENT resolved using rule 17 (attributes -> special_attribute attribute_empty .)
+  ! reduce/reduce conflict for $end resolved using rule 17 (attributes -> special_attribute attribute_empty .)
+    SPACE           reduce using rule 17 (attributes -> special_attribute attribute_empty .)
+    INDENT          reduce using rule 17 (attributes -> special_attribute attribute_empty .)
+    OUTDENT         reduce using rule 17 (attributes -> special_attribute attribute_empty .)
+    $end            reduce using rule 17 (attributes -> special_attribute attribute_empty .)
 
-    attribute                      shift and go to state 21
-    attributes_list                shift and go to state 38
-    attribute_empty                shift and go to state 23
+  ! SPACE           [ reduce using rule 18 (attributes -> attribute_empty .) ]
+  ! INDENT          [ reduce using rule 18 (attributes -> attribute_empty .) ]
+  ! OUTDENT         [ reduce using rule 18 (attributes -> attribute_empty .) ]
+  ! $end            [ reduce using rule 18 (attributes -> attribute_empty .) ]
+
 
 state 33
 
-    (13) attribute -> ATTRIBUTE_NAME EQUALS . ATTRIBUTE_VALUE
+    (26) class_attribute -> DOT SPECIAL_ATTRIBUTE . id_attribute
+    (28) id_attribute -> . HASHTAG SPECIAL_ATTRIBUTE class_attribute
+    (29) id_attribute -> . id_attribute_empty
+    (31) id_attribute_empty -> .
 
-    ATTRIBUTE_VALUE shift and go to state 39
+  ! shift/reduce conflict for HASHTAG resolved as shift
+    HASHTAG         shift and go to state 15
+    LPAREN          reduce using rule 31 (id_attribute_empty -> .)
+    DOT             reduce using rule 31 (id_attribute_empty -> .)
+    SPACE           reduce using rule 31 (id_attribute_empty -> .)
+    INDENT          reduce using rule 31 (id_attribute_empty -> .)
+    OUTDENT         reduce using rule 31 (id_attribute_empty -> .)
+    $end            reduce using rule 31 (id_attribute_empty -> .)
 
+  ! HASHTAG         [ reduce using rule 31 (id_attribute_empty -> .) ]
+
+    id_attribute                   shift and go to state 40
+    id_attribute_empty             shift and go to state 16
 
 state 34
 
-    (18) class_attribute -> DOT SPECIAL_ATTRIBUTE id_attribute .
+    (28) id_attribute -> HASHTAG SPECIAL_ATTRIBUTE . class_attribute
+    (26) class_attribute -> . DOT SPECIAL_ATTRIBUTE id_attribute
+    (27) class_attribute -> . class_attribute_empty
+    (30) class_attribute_empty -> .
 
-    LPAREN          reduce using rule 18 (class_attribute -> DOT SPECIAL_ATTRIBUTE id_attribute .)
-    DOT             reduce using rule 18 (class_attribute -> DOT SPECIAL_ATTRIBUTE id_attribute .)
-    HASHTAG         reduce using rule 18 (class_attribute -> DOT SPECIAL_ATTRIBUTE id_attribute .)
-    INDENT          reduce using rule 18 (class_attribute -> DOT SPECIAL_ATTRIBUTE id_attribute .)
-    SPACE           reduce using rule 18 (class_attribute -> DOT SPECIAL_ATTRIBUTE id_attribute .)
+  ! shift/reduce conflict for DOT resolved as shift
+    DOT             shift and go to state 13
+    LPAREN          reduce using rule 30 (class_attribute_empty -> .)
+    HASHTAG         reduce using rule 30 (class_attribute_empty -> .)
+    SPACE           reduce using rule 30 (class_attribute_empty -> .)
+    INDENT          reduce using rule 30 (class_attribute_empty -> .)
+    OUTDENT         reduce using rule 30 (class_attribute_empty -> .)
+    $end            reduce using rule 30 (class_attribute_empty -> .)
 
+  ! DOT             [ reduce using rule 30 (class_attribute_empty -> .) ]
+
+    class_attribute                shift and go to state 41
+    class_attribute_empty          shift and go to state 14
 
 state 35
 
-    (20) id_attribute -> HASHTAG SPECIAL_ATTRIBUTE class_attribute .
+    (1) line -> tag dent line .
 
-    LPAREN          reduce using rule 20 (id_attribute -> HASHTAG SPECIAL_ATTRIBUTE class_attribute .)
-    DOT             reduce using rule 20 (id_attribute -> HASHTAG SPECIAL_ATTRIBUTE class_attribute .)
-    HASHTAG         reduce using rule 20 (id_attribute -> HASHTAG SPECIAL_ATTRIBUTE class_attribute .)
-    INDENT          reduce using rule 20 (id_attribute -> HASHTAG SPECIAL_ATTRIBUTE class_attribute .)
-    SPACE           reduce using rule 20 (id_attribute -> HASHTAG SPECIAL_ATTRIBUTE class_attribute .)
+    $end            reduce using rule 1 (line -> tag dent line .)
 
 
 state 36
 
-    (1) tag -> TAG_NAME attributes text INDENT tag .
+    (32) text -> SPACE TEXT .
 
-    $end            reduce using rule 1 (tag -> TAG_NAME attributes text INDENT tag .)
+    INDENT          reduce using rule 32 (text -> SPACE TEXT .)
+    OUTDENT         reduce using rule 32 (text -> SPACE TEXT .)
+    $end            reduce using rule 32 (text -> SPACE TEXT .)
 
 
 state 37
 
-    (9) attributes -> LPAREN attributes_list RPAREN special_attribute .
+    (15) attributes -> LPAREN attributes_list RPAREN . special_attribute
+    (24) special_attribute -> . class_attribute
+    (25) special_attribute -> . id_attribute
+    (26) class_attribute -> . DOT SPECIAL_ATTRIBUTE id_attribute
+    (27) class_attribute -> . class_attribute_empty
+    (28) id_attribute -> . HASHTAG SPECIAL_ATTRIBUTE class_attribute
+    (29) id_attribute -> . id_attribute_empty
+    (30) class_attribute_empty -> .
+    (31) id_attribute_empty -> .
 
-    INDENT          reduce using rule 9 (attributes -> LPAREN attributes_list RPAREN special_attribute .)
-    SPACE           reduce using rule 9 (attributes -> LPAREN attributes_list RPAREN special_attribute .)
+  ! reduce/reduce conflict for SPACE resolved using rule 30 (class_attribute_empty -> .)
+  ! reduce/reduce conflict for INDENT resolved using rule 30 (class_attribute_empty -> .)
+  ! reduce/reduce conflict for OUTDENT resolved using rule 30 (class_attribute_empty -> .)
+  ! reduce/reduce conflict for $end resolved using rule 30 (class_attribute_empty -> .)
+    DOT             shift and go to state 13
+    HASHTAG         shift and go to state 15
+    SPACE           reduce using rule 30 (class_attribute_empty -> .)
+    INDENT          reduce using rule 30 (class_attribute_empty -> .)
+    OUTDENT         reduce using rule 30 (class_attribute_empty -> .)
+    $end            reduce using rule 30 (class_attribute_empty -> .)
 
+  ! SPACE           [ reduce using rule 31 (id_attribute_empty -> .) ]
+  ! INDENT          [ reduce using rule 31 (id_attribute_empty -> .) ]
+  ! OUTDENT         [ reduce using rule 31 (id_attribute_empty -> .) ]
+  ! $end            [ reduce using rule 31 (id_attribute_empty -> .) ]
+
+    special_attribute              shift and go to state 42
+    class_attribute                shift and go to state 11
+    id_attribute                   shift and go to state 12
+    class_attribute_empty          shift and go to state 14
+    id_attribute_empty             shift and go to state 16
 
 state 38
 
-    (11) attributes_list -> attribute COMMA attributes_list .
+    (19) attributes_list -> attribute COMMA . attributes_list
+    (19) attributes_list -> . attribute COMMA attributes_list
+    (20) attributes_list -> . attribute
+    (21) attribute -> . ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE
+    (22) attribute -> . attribute_empty
+    (23) attribute_empty -> .
 
-    RPAREN          reduce using rule 11 (attributes_list -> attribute COMMA attributes_list .)
+    ATTRIBUTE_NAME  shift and go to state 29
+    COMMA           reduce using rule 23 (attribute_empty -> .)
+    RPAREN          reduce using rule 23 (attribute_empty -> .)
 
+    attribute                      shift and go to state 28
+    attributes_list                shift and go to state 43
+    attribute_empty                shift and go to state 30
 
 state 39
 
-    (13) attribute -> ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE .
+    (21) attribute -> ATTRIBUTE_NAME EQUALS . ATTRIBUTE_VALUE
 
-    COMMA           reduce using rule 13 (attribute -> ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE .)
-    RPAREN          reduce using rule 13 (attribute -> ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE .)
+    ATTRIBUTE_VALUE shift and go to state 44
+
+
+state 40
+
+    (26) class_attribute -> DOT SPECIAL_ATTRIBUTE id_attribute .
+
+    LPAREN          reduce using rule 26 (class_attribute -> DOT SPECIAL_ATTRIBUTE id_attribute .)
+    DOT             reduce using rule 26 (class_attribute -> DOT SPECIAL_ATTRIBUTE id_attribute .)
+    HASHTAG         reduce using rule 26 (class_attribute -> DOT SPECIAL_ATTRIBUTE id_attribute .)
+    SPACE           reduce using rule 26 (class_attribute -> DOT SPECIAL_ATTRIBUTE id_attribute .)
+    INDENT          reduce using rule 26 (class_attribute -> DOT SPECIAL_ATTRIBUTE id_attribute .)
+    OUTDENT         reduce using rule 26 (class_attribute -> DOT SPECIAL_ATTRIBUTE id_attribute .)
+    $end            reduce using rule 26 (class_attribute -> DOT SPECIAL_ATTRIBUTE id_attribute .)
+
+
+state 41
+
+    (28) id_attribute -> HASHTAG SPECIAL_ATTRIBUTE class_attribute .
+
+    LPAREN          reduce using rule 28 (id_attribute -> HASHTAG SPECIAL_ATTRIBUTE class_attribute .)
+    DOT             reduce using rule 28 (id_attribute -> HASHTAG SPECIAL_ATTRIBUTE class_attribute .)
+    HASHTAG         reduce using rule 28 (id_attribute -> HASHTAG SPECIAL_ATTRIBUTE class_attribute .)
+    SPACE           reduce using rule 28 (id_attribute -> HASHTAG SPECIAL_ATTRIBUTE class_attribute .)
+    INDENT          reduce using rule 28 (id_attribute -> HASHTAG SPECIAL_ATTRIBUTE class_attribute .)
+    OUTDENT         reduce using rule 28 (id_attribute -> HASHTAG SPECIAL_ATTRIBUTE class_attribute .)
+    $end            reduce using rule 28 (id_attribute -> HASHTAG SPECIAL_ATTRIBUTE class_attribute .)
+
+
+state 42
+
+    (15) attributes -> LPAREN attributes_list RPAREN special_attribute .
+
+    SPACE           reduce using rule 15 (attributes -> LPAREN attributes_list RPAREN special_attribute .)
+    INDENT          reduce using rule 15 (attributes -> LPAREN attributes_list RPAREN special_attribute .)
+    OUTDENT         reduce using rule 15 (attributes -> LPAREN attributes_list RPAREN special_attribute .)
+    $end            reduce using rule 15 (attributes -> LPAREN attributes_list RPAREN special_attribute .)
+
+
+state 43
+
+    (19) attributes_list -> attribute COMMA attributes_list .
+
+    RPAREN          reduce using rule 19 (attributes_list -> attribute COMMA attributes_list .)
+
+
+state 44
+
+    (21) attribute -> ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE .
+
+    COMMA           reduce using rule 21 (attribute -> ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE .)
+    RPAREN          reduce using rule 21 (attribute -> ATTRIBUTE_NAME EQUALS ATTRIBUTE_VALUE .)
 
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for LPAREN in state 2 resolved as shift
-WARNING: shift/reduce conflict for DOT in state 2 resolved as shift
-WARNING: shift/reduce conflict for HASHTAG in state 2 resolved as shift
-WARNING: shift/reduce conflict for LPAREN in state 2 resolved as shift
-WARNING: shift/reduce conflict for DOT in state 2 resolved as shift
-WARNING: shift/reduce conflict for HASHTAG in state 2 resolved as shift
-WARNING: shift/reduce conflict for LPAREN in state 8 resolved as shift
-WARNING: shift/reduce conflict for DOT in state 8 resolved as shift
-WARNING: shift/reduce conflict for HASHTAG in state 8 resolved as shift
-WARNING: shift/reduce conflict for LPAREN in state 8 resolved as shift
-WARNING: shift/reduce conflict for DOT in state 8 resolved as shift
-WARNING: shift/reduce conflict for HASHTAG in state 8 resolved as shift
-WARNING: shift/reduce conflict for HASHTAG in state 26 resolved as shift
-WARNING: shift/reduce conflict for DOT in state 27 resolved as shift
-WARNING: reduce/reduce conflict in state 31 resolved using rule (class_attribute_empty -> <empty>)
-WARNING: rejected rule (id_attribute_empty -> <empty>) in state 31
+WARNING: shift/reduce conflict for LPAREN in state 0 resolved as shift
+WARNING: shift/reduce conflict for DOT in state 0 resolved as shift
+WARNING: shift/reduce conflict for HASHTAG in state 0 resolved as shift
+WARNING: shift/reduce conflict for LPAREN in state 0 resolved as shift
+WARNING: shift/reduce conflict for DOT in state 0 resolved as shift
+WARNING: shift/reduce conflict for HASHTAG in state 0 resolved as shift
+WARNING: shift/reduce conflict for LPAREN in state 3 resolved as shift
+WARNING: shift/reduce conflict for DOT in state 3 resolved as shift
+WARNING: shift/reduce conflict for HASHTAG in state 3 resolved as shift
+WARNING: shift/reduce conflict for LPAREN in state 3 resolved as shift
+WARNING: shift/reduce conflict for DOT in state 3 resolved as shift
+WARNING: shift/reduce conflict for HASHTAG in state 3 resolved as shift
+WARNING: shift/reduce conflict for LPAREN in state 10 resolved as shift
+WARNING: shift/reduce conflict for DOT in state 10 resolved as shift
+WARNING: shift/reduce conflict for HASHTAG in state 10 resolved as shift
+WARNING: shift/reduce conflict for LPAREN in state 10 resolved as shift
+WARNING: shift/reduce conflict for DOT in state 10 resolved as shift
+WARNING: shift/reduce conflict for HASHTAG in state 10 resolved as shift
+WARNING: shift/reduce conflict for LPAREN in state 17 resolved as shift
+WARNING: shift/reduce conflict for DOT in state 17 resolved as shift
+WARNING: shift/reduce conflict for HASHTAG in state 17 resolved as shift
+WARNING: shift/reduce conflict for LPAREN in state 17 resolved as shift
+WARNING: shift/reduce conflict for DOT in state 17 resolved as shift
+WARNING: shift/reduce conflict for HASHTAG in state 17 resolved as shift
+WARNING: shift/reduce conflict for HASHTAG in state 33 resolved as shift
+WARNING: shift/reduce conflict for DOT in state 34 resolved as shift
+WARNING: reduce/reduce conflict in state 0 resolved using rule (attribute_empty -> <empty>)
+WARNING: rejected rule (class_attribute_empty -> <empty>) in state 0
+WARNING: reduce/reduce conflict in state 0 resolved using rule (attribute_empty -> <empty>)
+WARNING: rejected rule (id_attribute_empty -> <empty>) in state 0
+WARNING: reduce/reduce conflict in state 3 resolved using rule (attribute_empty -> <empty>)
+WARNING: rejected rule (class_attribute_empty -> <empty>) in state 3
+WARNING: reduce/reduce conflict in state 3 resolved using rule (attribute_empty -> <empty>)
+WARNING: rejected rule (id_attribute_empty -> <empty>) in state 3
+WARNING: reduce/reduce conflict in state 8 resolved using rule (attributes_aux -> attribute_empty)
+WARNING: rejected rule (attributes -> attribute_empty) in state 8
+WARNING: reduce/reduce conflict in state 10 resolved using rule (attribute_empty -> <empty>)
+WARNING: rejected rule (class_attribute_empty -> <empty>) in state 10
+WARNING: reduce/reduce conflict in state 10 resolved using rule (attribute_empty -> <empty>)
+WARNING: rejected rule (id_attribute_empty -> <empty>) in state 10
+WARNING: reduce/reduce conflict in state 17 resolved using rule (attribute_empty -> <empty>)
+WARNING: rejected rule (class_attribute_empty -> <empty>) in state 17
+WARNING: reduce/reduce conflict in state 17 resolved using rule (attribute_empty -> <empty>)
+WARNING: rejected rule (id_attribute_empty -> <empty>) in state 17
+WARNING: reduce/reduce conflict in state 32 resolved using rule (attributes -> special_attribute attribute_empty)
+WARNING: rejected rule (attributes -> attribute_empty) in state 32
+WARNING: reduce/reduce conflict in state 37 resolved using rule (class_attribute_empty -> <empty>)
+WARNING: rejected rule (id_attribute_empty -> <empty>) in state 37
+WARNING: Rule (attributes -> attribute_empty) is never reduced

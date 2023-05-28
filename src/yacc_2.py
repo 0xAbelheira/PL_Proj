@@ -6,95 +6,73 @@ from lex import tokens
 prev_lineno = 0
 dent_level = 0
 
+def p_pug(p):
+    '''
+    pug : tag_list
+    '''
+    p[0] = TagNode(name='yoo', children=p[1])
 
-def p_line(p):
+def p_tag_list(p):
     '''
-    line : tag dent line
-         | tag line_empty
+    tag_list : tag 
+             | tag_list tag
     '''
-    p[0] = p[1] 
-    if len(p) == 4:
-        print(dent_level)
-        if p[2] == 0:
-            # indent
-            p[1].add_child(p[3])
-        elif p[2] > 0:
-            # outdent
-            for _ in range(0, p[2]):
-                parent = p[1].parent
-            parent.add_child(p[3])
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[0] = p[1] + [p[2]]
 
-def p_line_empty(p):
+def p_tag_tag(p):
     '''
-    line_empty : 
+    tag : TAG_NAME
+        | TAG_NAME INDENT tag_list OUTDENT
     '''
-    p[0] = None
+    if len(p) == 2:
+        p[0] = TagNode(name=p[1])
+    else:
+        p[0] = TagNode(name=p[1], children=p[3])
 
-def p_dent(p):
+def p_tag_attributes(p):
     '''
-    dent : indent
-         | outdent
-    '''
-    p[0] = p[1]
-
-def p_indent(p):
-    '''
-    indent : INDENT
-    '''
-    p[0] = 0
-    global dent_level 
-    dent_level += 1
-
-def p_outdent(p):
-    '''
-    outdent : OUTDENT
-    '''
-    global dent_level
-    new_dent_level = p[1] // 4
-    p[0] = dent_level - new_dent_level
-    dent_level = new_dent_level
-
-def p_tag(p):
-    '''
-    tag : TAG_NAME inside_tag 
-        | div_tag
+    tag : TAG_NAME attributes
+        | TAG_NAME attributes INDENT tag_list OUTDENT
     '''
     if len(p) == 3:
-        p[0] = TagNode(name=p[1], attributes=p[2][0], text=p[2][1])
+        p[0] = TagNode(name=p[1], attributes=p[2])
     else:
-        p[0] = TagNode(name="div", attributes=p[1][0], text=p[1][1])
-    
-def p_div_tag(p):
-    '''
-    div_tag : inside_tag
-    '''
-    p[0] = p[1]
+        p[0] = TagNode(name=p[1], attributes=p[2], children=[p[4]])
 
-def p_inside_tag(p):
+def p_tag_text(p):
     '''
-    inside_tag : attributes_aux text
+    tag : TAG_NAME text
+        | TAG_NAME text INDENT tag_list OUTDENT
     '''
-    p[0] = [p[1], p[2]]
+    if len(p) == 3:
+        p[0] = TagNode(name=p[1], text=p[2])
+    else:
+        p[0] = TagNode(name=p[1], text=p[2], children=[p[4]])
 
-
-
-def p_attributes_aux(p):
+def p_tag_attributes_text(p):
     '''
-    attributes_aux : attributes
-                   | attribute_empty
+    tag : TAG_NAME attributes text
+        | TAG_NAME attributes text INDENT tag_list OUTDENT
     '''
-    p[0] = p[1]
+    if len(p) == 3:
+        p[0] = TagNode(name=p[1], attributes=p[2], text=[p[3]])
+    else:
+        p[0] = TagNode(name=p[1], attributes=p[2], text=p[3], children=[p[4]])
+
 
 
 def p_tag_empty(p):
     '''
     tag_empty :
     '''
-    p[0] = []
+    p[0] = None
 
 def p_attributes(p):
     '''
-    attributes : LPAREN attributes_list RPAREN special_attribute
+    attributes : LPAREN attribute_list RPAREN special_attribute
                | special_attribute attributes
                | special_attribute attribute_empty
                | attribute_empty
@@ -106,9 +84,9 @@ def p_attributes(p):
     if len(p) == 2:
         p[0] = p[1]
 
-def p_attributes_list(p):
+def p_attribute_list(p):
     '''
-    attributes_list : attribute COMMA attributes_list
+    attribute_list : attribute COMMA attribute_list
                     | attribute
     '''
     if len(p) == 4:
